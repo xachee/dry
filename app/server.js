@@ -7,5 +7,8 @@ const app= new koa();
 app.listen(8080);
 
 app.use(function (ctx) {
-    ctx.body=ctx.url;
+    if(ctx.url=="/p1" || ctx.url=="/")
+        ctx.body="<center><p>This is Page1<br><a href='p2'>Page 2</a></p></center>";
+    else if(ctx.url=="/p2")
+        ctx.body="<center><p>This is Page2<br><a href='p1'>Page 1</a></p></center>";
 })
