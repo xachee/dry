@@ -1,7 +1,6 @@
-let b = new Promise(function(resolve,reject){
-    setTimeout(function(){ resolve("blabla"),0 });
+'use strict';
 
-});
-b.then(function (data) {
-    console.log(data);
-})
+var app = require('./app/server');
+
+app.listen(8080);
+console.log('Server is created and listens on 8080 port');
