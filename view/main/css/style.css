@@ -1,0 +1,38 @@
+
+.about{
+	width: 30%;
+	display: inline-block;
+	position: absolute;
+	top:50px;
+	left:0px;
+}
+
+.post{
+	display: inline-block;
+	width: 50%;
+	position: absolute;
+	top:50px;
+	right: 10%;
+}
+.footer{	
+	position: absolute;
+	bottom:50px;
+	left:40%;
+}
+center{
+	width: 75%;
+}
+.menu-link{
+	list-style-type: none;
+}
+@media only screen and (max-width: 700px){
+	.post{
+		top:350px;
+		left:0px;
+	}
+	.footer{
+		left:0px;
+		bottom: 0px;
+	}
+
+}
