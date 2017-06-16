@@ -24,7 +24,14 @@ center{
 }
 .menu-link{
 	list-style-type: none;
+	padding-left:0px; 
 }
+
+li{
+	margin-left: 10px;
+	display: inline;
+}
+
 @media only screen and (max-width: 700px){
 	.post{
 		top:350px;
