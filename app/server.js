@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-"use strict"
-const http = require("http");
-const Koa = require("koa");
-const KoaEjs = require("koa-ejs");
-const router = require("koa-router");
-
-var app = new Koa();
-=======
-//koa-ejs, koa,  koa-ruter,'loover', passport,
 const http=require("http");
 const koa=require("koa");
 const koaejs=require("koa-ejs");
