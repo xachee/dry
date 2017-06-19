@@ -24,6 +24,7 @@ async function payment(ctx){
 
 router.get('/create', create);
 router.get('/main', main);
+router.get('/', main);
 router.get('/playlist-list', playlist_l);
 router.get('/playlist-page', playlist_p);
 router.get('/payment', payment);

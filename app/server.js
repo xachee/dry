@@ -15,7 +15,7 @@ render(server, {
     debug: true
 });
 
-server.use(koaStatic('../public'));
+server.use(koaStatic('./public'));
 
 server.use(router.routes());
 server.use(router.allowedMethods());
