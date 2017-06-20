@@ -32,6 +32,28 @@ li{
 	display: inline;
 }
 
+.login button{
+	display: inline-block;
+	position: absolute;
+	top:150px;
+	left:15vw;
+	background-color: #0074d1;
+	width:120px;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 25px;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	height:35px;
+	vertical-align: middle;
+}
+.login button:hover{
+	background-color: #0074ff;
+	font-size: 28px;
+	cursor:pointer;
+}
+
 @media only screen and (max-width: 700px){
 	.post{
 		top:350px;
