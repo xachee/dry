@@ -10,17 +10,23 @@
   </head>
  <body>
     <center>
-                <div class="about" style="display: none">
-                      <img src="img/my-pic.png">
+                <div class="about" <% if( typeof user== 'undefined'){%> style='display:none;' <%}%> >
+                    <% if( typeof user!= 'undefined'){%> <p> <%=user.displayName%> </p> <%}%>
+                      <img <% if( typeof user!= 'undefined'){%> src=" <%=user.photos[0].value.split("=")[0]+"=250"%> " <%}%>>
                          <div id="menu">
                            <ul class="menu-link">
                                <li><a href="/playlist-list">My Playlist</a></li>
                                <li><a href="/playlist-page">Bought Playlist</a></li>
                             </ul>
                          </div>
+                   <center>
+                     <div class="logout">
+                          <a href="/logout"><button id="logout" >Logout</button></a>
+                     </div>
+                   </center>
                 </div>
                 <div class="login">
-                     <button id="log">Login</button>
+                    <a href="/auth/google"><button id="log" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%> >Login</button></a>
                 </div>
                 <div class="post">
                       <div class="post-title">
