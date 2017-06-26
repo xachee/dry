@@ -1,10 +1,19 @@
-
+body{
+	font-family: Arial;
+}
+.about #user_name{
+	font-family: arial;
+	font-weight: 600;
+}
 .about{
-	width: 30%;
+	float: left;
+	margin-left: 18%;
+	padding: 8px;
+	border: solid 1px #cecece;
+	border-radius: 10px;
 	display: inline-block;
-	position: absolute;
-	top:50px;
-	left:0px;
+	box-shadow: 0 0 15px #888888;
+	margin-top: 60px;
 }
 
 .post{
@@ -31,34 +40,30 @@ li{
 	margin-left: 10px;
 	display: inline;
 }
-
+.menu-link li a {
+	text-decoration: none;
+	color: #0074d1;
+}
+.menu-link li a:hover {
+	text-decoration: underline;
+	color: #551a8b;
+}
 .login button,.logout button{
-	display: inline-block;
-	position: absolute;
-	top:150px;
-	left:15vw;
-	background-color: #0074d1;
-	width:120px;
+	transition: all .5s;
+	background-color: #2196F3;
 	font-family: arial;
 	font-weight: bold;
 	font-size: 25px;
-	color: white;
+	color: #fff;
+	border-radius: 10px;
+	padding: 8px 35px;
 	border: none;
-	border-radius: 5px;
-	height:35px;
+	display: inline-block;
 	vertical-align: middle;
 }
-.logout button{
-	top:350px;
-	left:10vw;
-}
-.logout{
-	text-align: center;
-
-}
+.
 .login button:hover,.logout button:hover{
 	background-color: #0074ff;
-	font-size: 28px;
 	cursor:pointer;
 }
 
