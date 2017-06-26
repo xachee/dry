@@ -21,28 +21,34 @@
              <li><a href="/payment">Payment</a></li>
          </div>
      </div>
-     <center>
-         <% if( typeof user !== 'undefined'){ %>
 
-             <div class="about" >
-                 <img src=" <%=user.photos[0].value.split("=")[0]+"=250"%> ">
-                 <p id = "user_name"> <%=user.displayName%> </p>
-                 <div id="menu">
-                     <ul class="menu-link">
-                         <li><a href="/playlist-list">My Playlist</a></li>
-                         <li><a href="/playlist-page">Bought Playlist</a></li>
-                     </ul>
-                 </div>
+        <div class="main">
+            <div class="reg_bar">
+                <% if( typeof user !== 'undefined'){ %>
 
-                 <div class="logout">
-                     <a href="/logout"><button id="logout" style="font-size: 18px;">Logout</button></a>
-                 </div>
-             </div>
+                <div class="about" >
+                    <img style="border-radius: 10px" src=" <%=user.photos[0].value.split("=")[0]+"=250"%> ">
+                    <p id = "user_name"> <%=user.displayName%> </p>
+                    <div id="menu">
+                        <ul class="menu-link">
+                            <li><a href="/playlist-list">My Playlist</a></li>
+                            <li><a href="/playlist-page">Bought Playlist</a></li>
+                        </ul>
+                    </div>
 
-         <%}%>
-         <div class="login">
-             <a href="/auth/google"><button id="log" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%> >Login</button></a>
-         </div>
+                    <div class="logout">
+                        <a href="/logout"><button id="logout" style="font-size: 18px;">Logout</button></a>
+                    </div>
+                </div>
+
+                <%}%>
+                <div class="login" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%>>
+                    <a href="/auth/google"><button id="log" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%> >Login</button></a>
+                    <span>Through Google</span>
+                </div>
+            </div>
+
+
          <div class="post">
              <div class="post-title">
                  <h1>News</h1>
@@ -57,6 +63,15 @@
                  <span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
              </div>
          </div>
+
+     </div>
+
+
+
+
+
+
+
          <div class="footer">
              <footer>
 
@@ -64,6 +79,6 @@
 
              </footer>
          </div>
-     </center>
+
     </body>
  </html>

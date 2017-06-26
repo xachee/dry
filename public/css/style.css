@@ -1,27 +1,43 @@
 body{
 	font-family: Arial;
 }
+.main{
+	width: 60%;
+	/* display: inline-block; */
+	padding: 10px;
+	margin: 70px auto;
+	border: solid 1px #cecece;
+	border-radius: 10px;
+}
 .about #user_name{
 	font-family: arial;
 	font-weight: 600;
 }
+.reg_bar{
+	border-right: solid 1px #cecece;
+	width: 30%;
+	/* margin-top: 10px; */
+	display: inline-block;
+	text-align: center;
+}
 .about{
-	float: left;
-	margin-left: 18%;
+	text-align: center;
+	/* float: left; */
+	/* margin-left: 18%; */
 	padding: 8px;
-	border: solid 1px #cecece;
+	/* border: solid 1px #cecece; */
 	border-radius: 10px;
 	display: inline-block;
-	box-shadow: 0 0 15px #888888;
-	margin-top: 60px;
+	/* box-shadow: 0 0 15px #888888; */
+	/* margin-top: 60px; */
 }
 
 .post{
+	vertical-align: top;
+	padding-left: 30px;
 	display: inline-block;
-	width: 50%;
-	position: absolute;
-	top:50px;
-	right: 10%;
+	width: 60%;
+
 }
 .footer{
 	position: absolute;
@@ -48,7 +64,14 @@ li{
 	text-decoration: underline;
 	color: #551a8b;
 }
-.login button,.logout button{
+.login{
+	width: 40%;
+	margin-top: 10px;
+	display: inline-block;
+	text-align: center;
+}
+.login  button,.logout  button{
+	outline: none;
 	transition: all .5s;
 	background-color: #2196F3;
 	font-family: arial;
@@ -61,12 +84,14 @@ li{
 	display: inline-block;
 	vertical-align: middle;
 }
-.
-.login button:hover,.logout button:hover{
-	background-color: #0074ff;
-	cursor:pointer;
+.login  button:hover,.logout  button:hover{
+	background-color: #0074d1;
 }
-
+.login span{
+	font-weight: 600;
+	display: block;
+	color: #bbb
+}
 @media only screen and (max-width: 700px){
 	.post{
 		top:350px;
