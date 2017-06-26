@@ -14,7 +14,7 @@
 	top:50px;
 	right: 10%;
 }
-.footer{	
+.footer{
 	position: absolute;
 	bottom:50px;
 	left:40%;
@@ -24,7 +24,7 @@ center{
 }
 .menu-link{
 	list-style-type: none;
-	padding-left:0px; 
+	padding-left:0px;
 }
 
 li{
@@ -32,10 +32,11 @@ li{
 	display: inline;
 }
 
-.login button,.logout button{
+.login button{
 	display: inline-block;
 	position: absolute;
 	top:150px;
+	left:15vw;
 	background-color: #0074d1;
 	width:120px;
 	font-family: arial;
@@ -47,31 +48,20 @@ li{
 	height:35px;
 	vertical-align: middle;
 }
-.login button{
-	left:15vw;
+.login button:hover{
+	background-color: #0074ff;
+	font-size: 28px;
+	cursor:pointer;
 }
-.logout button{
-	top:350px;
-	left:10vw;
-}
-.logout{
-	text-align: center;
-}
-.login button:hover,.logout button:hover{
-	 background-color: #0074ff;
-	 font-size: 28px;
-	 cursor:pointer;
- }
+
 @media only screen and (max-width: 700px){
 	.post{
-		top:450px;
+		top:350px;
 		left:0px;
 	}
 	.footer{
 		left:0px;
 		bottom: 0px;
 	}
-	.logout button{
-		top:370px;
-	}
+
 }

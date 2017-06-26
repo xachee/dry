@@ -3,51 +3,63 @@
   <head>
     <!-- Meta Tag -->
     <meta charset="UTF-8">
-    <title>Pplaylist Shop</title>
+    <title>Playlist Store</title>
     <!-- All CSS Plugins -->
+      <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
   </head>
  <body>
-    <center>
-                <div class="about" <% if( typeof user== 'undefined'){%> style='display:none;' <%}%> >
-                    <% if( typeof user!= 'undefined'){%> <p> <%=user.displayName%> </p> <%}%>
-                      <img <% if( typeof user!= 'undefined'){%> src=" <%=user.photos[0].value.split("=")[0]+"=250"%> " <%}%>>
-                         <div id="menu">
-                           <ul class="menu-link">
-                               <li><a href="/playlist-list">My Playlist</a></li>
-                               <li><a href="/playlist-page">Bought Playlist</a></li>
-                            </ul>
-                         </div>
-                   <center>
-                     <div class="logout">
-                          <a href="/logout"><button id="logout" >Logout</button></a>
-                     </div>
-                   </center>
-                </div>
-                <div class="login">
-                    <a href="/auth/google"><button id="log" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%> >Login</button></a>
-                </div>
-                <div class="post">
-                      <div class="post-title">
-                          <h1>News</h1>
-                      </div>  
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique temporibus tempora dicta soluta? Qui hic, voluptatem nemo quo corporis dignissimos voluptatum debitis cumque fugiat mollitia quasi quod. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique.</p>
-         
-                      <div class="post-info">
-                      	<span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
-                      </div>  
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique temporibus tempora dicta soluta? Qui hic, voluptatem nemo quo corporis dignissimos voluptatum debitis cumque fugiat mollitia quasi quod. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique.</p>
-                      <div class="post-info">
-                        <span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
-                      </div>  
+     <div class="nav">
+         <h2 class="header_text"><img src="img/music-player.png" alt="Playlist List" id="playlist_list_logo">Playlist Store</h2>
+         <div class="nav-menu">
+             <li class="active_page">Home</li>
+             <li><a href="/playlist-list">Playlist List</a></li>
+             <li><a href="/create">Create Playlist</a></li>
+             <li><a href="/playlist-page">Playlist Page</a></li>
+             <li><a href="/payment">Payment</a></li>
+         </div>
+     </div>
+     <center><% if( typeof user !== 'undefined'){ %>
+         <div class="about"  >
+             <p> <%=user.displayName%> </p>
+             <img src=" <%=user.photos[0].value.split("=")[0]+"=250"%> ">
+             <div id="menu">
+                 <ul class="menu-link">
+                     <li><a href="/playlist-list">My Playlist</a></li>
+                     <li><a href="/playlist-page">Bought Playlist</a></li>
+                 </ul>
+             </div>
+
+             <center>
+                 <div class="logout">
+                     <a href="/logout"><button id="logout" >Logout</button></a>
                  </div>
+             </center>
+         </div><%}%>
+         <div class="login">
+             <a href="/auth/google"><button id="log" <% if( typeof user!== 'undefined'){%> style='display:none;'<%}%> >Login</button></a>
+         </div>
+         <div class="post">
+             <div class="post-title">
+                 <h1>News</h1>
+             </div>
+             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique temporibus tempora dicta soluta? Qui hic, voluptatem nemo quo corporis dignissimos voluptatum debitis cumque fugiat mollitia quasi quod. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique.</p>
+
+             <div class="post-info">
+                 <span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
+             </div>
+             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique temporibus tempora dicta soluta? Qui hic, voluptatem nemo quo corporis dignissimos voluptatum debitis cumque fugiat mollitia quasi quod. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique.</p>
+             <div class="post-info">
+                 <span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
+             </div>
+         </div>
          <div class="footer">
-            <footer>
+             <footer>
 
-            <p>© Copyright 2016 All rights reserved</p>
+                 <p>© Copyright 2016 All rights reserved</p>
 
-           </footer>
+             </footer>
          </div>
      </center>
     </body>

@@ -1,0 +1,72 @@
+body{
+    margin:0;
+}
+.nav #playlist_list_logo{
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+.nav .header_text{
+    margin: 0;
+    font-family: Courier New;
+    font-size: 25px;
+    margin: 20px;
+    margin-left: 50px;
+    /* margin: 20px; */
+    color: #616161;
+    display: inline-block;
+}
+.nav{
+    z-index: 9990;
+    /*top: 0;*/
+    /*width: 100%;*/
+    /*position: fixed;*/
+    background-color: rgba(255,255,255,0.6);
+    border-bottom: 1px solid #c7c7c7;
+}
+.nav .nav-menu{
+    float: right;
+    margin-left: 50px;
+    margin: 27px;
+    margin-right: 100px;
+}
+.nav .nav-menu a {
+    display: inline-block;
+    color: #616161;
+    text-decoration: none;
+}
+
+.nav .nav-menu a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #616161;
+    transition: width .3s;
+}
+
+.nav .nav-menu a:hover::after {
+    width: 100%;
+//transition: width .3s;
+}
+.nav .nav-menu li{
+    transition: all .05s;
+    font-size: 18px;
+    color: #616161;
+    font-weight: bold;
+    font-family: Arial;
+    display: inline-block;
+    margin-left: 15px;
+    list-style: none;
+}
+.active_page::after{
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #616161;
+    transition: width .3s;
+}
+/*.nav .nav-menu li:hover{*/
+/*border-bottom: 2px solid #616161;*/
+/*}*/

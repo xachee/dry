@@ -1,21 +1,6 @@
-
 body{
   margin: 0;
   padding: 0;
-}
-.nav #playlist_list_logo{
-  width: 40px;
-  vertical-align: middle;
-  margin-right: 15px;
-}
-.nav .header_text{
-  font-family: Courier New;
-  font-size: 35px;
-  margin-left: 50px;
-  color: #616161;
-}
-.nav{
-  border-bottom: 1px solid #c7c7c7;
 }
 .buy_bar{
   width: 100%;
