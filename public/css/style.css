@@ -32,7 +32,7 @@ li{
 	display: inline;
 }
 
-.login button{
+.login button,.logout button{
 	display: inline-block;
 	position: absolute;
 	top:150px;
@@ -48,7 +48,15 @@ li{
 	height:35px;
 	vertical-align: middle;
 }
-.login button:hover{
+.logout button{
+	top:350px;
+	left:10vw;
+}
+.logout{
+	text-align: center;
+
+}
+.login button:hover,.logout button:hover{
 	background-color: #0074ff;
 	font-size: 28px;
 	cursor:pointer;

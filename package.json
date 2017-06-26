@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "googleapis": "^19.0.0",
     "install": "^0.10.1",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
