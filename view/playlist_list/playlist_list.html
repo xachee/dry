@@ -22,7 +22,7 @@
 
       <div class="playlist_list">
         <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length-1;i++){ %>
-        <a href="/playlist-page?id="<%= playlists[i].id %>><div class="playlist_box">
+        <a href="/playlist-page?id=<%= playlists[i].id %> "><div class="playlist_box">
           <div class="playlist_img" style=" background-image: url(<%= playlists[i].snippet.thumbnails.medium.url %>);"></div>
           <p class="playlist_name"><%= playlists[i].snippet.title%></p>
          </div>
