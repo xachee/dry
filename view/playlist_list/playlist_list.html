@@ -19,12 +19,17 @@
           <li><a href="/payment">Payment</a></li>
         </div>
       </div>
+
       <div class="playlist_list">
-        <div class="playlist_box">
-          <div class="playlist_img" style="background-image: url(img/music-player.png);"></div>
-          <p class="playlist_name">Name</p>
-        </div>
+        <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length-1;i++){ %>
+        <a href="/playlist-page?id="<%= playlists[i].id %>><div class="playlist_box">
+          <div class="playlist_img" style=" background-image: url(<%= playlists[i].snippet.thumbnails.medium.url %>);"></div>
+          <p class="playlist_name"><%= playlists[i].snippet.title%></p>
+         </div>
+        </a>
+        <% } } %>
       </div>
+
       <div class="buy_bar">
         <a href="/payment"><button type="button" name="button" class="buy_button">Buy</button></a>
         <a href="/create"><button type="button" name="button" class="create_button">Create</button></a>

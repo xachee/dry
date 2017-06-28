@@ -13,8 +13,14 @@ async function create(ctx) {
   await ctx.render('create_playlist_to_sell/create_playlist_to_sell');
 }
 
-async function playlist_l(ctx) {
-  await ctx.render('playlist_list/playlist_list');
+async function playlist_l(ctx){
+
+  var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
+  var data = await youApi.getPlaylistData();
+  var items= await youApi.getPlaylistItems(data.items[1].id);
+  console.log(items);
+  await ctx.render('playlist_list/playlist_list',{playlists:data.items});
+
 }
 
 async function playlist_p(ctx) {
@@ -26,11 +32,6 @@ async function payment(ctx) {
 }
 async function dashboard(ctx, next) {
   await ctx.render('main/index', {user: ctx.state.user});
-
-  var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
-
-  youApi.getPlaylistData();
-
   await next();
 }
 async function logout(ctx) {

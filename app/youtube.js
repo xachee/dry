@@ -22,22 +22,43 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
         version:"v3",
         auth:this.oauth2Client
     });
-
+    var that =this;
     this.getPlaylistData=function getPlaylistData () {
-        this.youtube.playlists.list({
+        return new Promise(function (res,rej) {
+          that.youtube.playlists.list({
             part: 'snippet, contentDetails',
             mine:"true",
             maxResults : 25
-        }, function (err, data, response) {
+          }, function (err, data) {
             if (err) {
-                console.error('Error: ' + err);
+              console.error('Error: ' + err);
+              return rej();
             }
             if (data) {
-                console.log(data);
+              //console.log(data);
+              res(data);
             }
-        });
+          });
+        })
     };
-
+  this.getPlaylistItems=function getPlaylistItems (id) {
+    return new Promise(function (res,rej) {
+      that.youtube.playlistItems.list({
+        part: 'snippet, contentDetails',
+        playlistId: id,
+        maxResults : 25
+      }, function (err, data) {
+        if (err) {
+          console.error('Error: ' + err);
+          return rej();
+        }
+        if (data) {
+          //console.log(data);
+          res(data);
+        }
+      });
+    })
+  };
 };
 
 module.exports = YoutubeAPI;

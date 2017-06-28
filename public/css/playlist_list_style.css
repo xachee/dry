@@ -55,6 +55,11 @@ body{
   height: 300px;
   border-radius: 10px;
   border: 1px solid;
+
+}
+.playlist_img{
+  background-size: 100%;
+  background-repeat:no-repeat ;
 }
 .playlist_list .playlist_box .playlist_name{
   font-size: 20px;
