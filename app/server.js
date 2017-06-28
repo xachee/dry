@@ -20,12 +20,12 @@ render(server, {
 });
 
 
-server.use(koaStatic('./public'));
 
 server.use(passport.initialize());
 server.use(passport.session());
 server.use(router.routes());
 server.use(router.allowedMethods());
+server.use(koaStatic('./public'));
 server.use(bodyParser());
 
 module.exports = server;
