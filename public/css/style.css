@@ -3,6 +3,7 @@ body{
 	height: 100%;
 }
 .main{
+	position: relative;
 	min-height: 100%;
 	width: 60%;
 	/* display: inline-block; */
@@ -16,7 +17,6 @@ body{
 	font-weight: 600;
 }
 .reg_bar{
-	border-right: solid 1px #cecece;
 	width: 25%;
 	/* margin-top: 10px; */
 	padding-right: 10px;
@@ -34,7 +34,13 @@ body{
 	/* box-shadow: 0 0 15px #888888; */
 	/* margin-top: 60px; */
 }
-
+.divider{
+	position: absolute;
+	left: 27.5%;
+	top: 10px;
+	bottom: 10px;
+	border-left: 1px solid #c7c7c7;
+}
 .post{
 	vertical-align: top;
 	padding-left: 30px;
