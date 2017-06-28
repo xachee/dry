@@ -38,3 +38,25 @@ body{
 .buy_bar .buy_button:hover{
   background-color: #0074d1;
 }
+.playlist_list{
+  padding: 10px;
+}
+.playlist_list .playlist_box{
+  font-family: Arial;
+  text-align: center;
+  width: 24%;
+  display: inline-block;
+  border: 1px solid #c7c7c7;
+  padding: 10px;
+  border-radius: 10px;
+}
+.playlist_list .playlist_box .playlist_img{
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid;
+}
+.playlist_list .playlist_box .playlist_name{
+  font-size: 20px;
+  font-weight: 600;
+}
