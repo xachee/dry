@@ -17,14 +17,20 @@ async function playlist_l(ctx){
 
   var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
   var data = await youApi.getPlaylistData();
-  var items= await youApi.getPlaylistItems(data.items[1].id);
-  console.log(items);
   await ctx.render('playlist_list/playlist_list',{playlists:data.items});
 
 }
 
 async function playlist_p(ctx) {
-  await ctx.render('playlist-page/index');
+  var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
+  var data = await youApi.getPlaylistData();
+  var items= await youApi.getPlaylistItems(ctx.params.id);
+  for(var i=0;i<data.items.length;i++){
+    if(data.items[i].id==ctx.params.id){
+      var info=data.items[i];
+    }
+  }
+  await ctx.render('playlist-page/index',{info:info,items:items.items});
 }
 
 async function payment(ctx) {
@@ -50,7 +56,7 @@ router.get('/create', create);
 router.get('/main', main);
 router.get('/', main);
 router.get('/playlist-list', playlist_l);
-router.get('/playlist-page', playlist_p);
+router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
 router.get('/auth/google', passport.authenticate('google', {
   scope: config.google.scope,
