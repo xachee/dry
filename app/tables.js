@@ -1,0 +1,1 @@
+const sq=require("./db");
