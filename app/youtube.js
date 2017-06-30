@@ -57,8 +57,54 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
           res(data);
         }
       });
-    })
+    });
   };
+
+  this.insertPlaylist=function insertPlaylist(obj){
+    return new Promise(function (res,rej) {
+      that.youtube.playlists.insert({
+        part: 'snippet,status',
+      resource:{ 
+        snippet:obj,
+        status: {
+          privacyStatus: 'private'
+          } 
+        }
+      },function (result) {
+        if (result) {
+         res();
+        }
+        else{
+          rej();
+        }
+      });
+    });
+  }
+
+  this.insertVideo=function insertVideo(obj){
+    return new Promise(function (res,rej) {
+      that.youtube.playlistItems.insert({
+        part: 'snippet',
+        resource:{ 
+          snippet:{
+            playlistId:obj.pid,
+            title:obj.ptitle,
+            resourceId:{
+              kind:"youtube#video",
+              videoId:obj.vid
+            }
+          },
+        }
+      },function (result) {
+        if (result) {
+         res();
+        }
+        else{
+          rej();
+        }
+      });
+    });
+  }
 };
 
 module.exports = YoutubeAPI;

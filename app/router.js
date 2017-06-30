@@ -28,6 +28,7 @@ async function playlist_p(ctx) {
   for(var i=0;i<data.items.length;i++){
     if(data.items[i].id==ctx.params.id){
       var info=data.items[i];
+      break;
     }
   }
   await ctx.render('playlist-page/index',{info:info,items:items.items});
