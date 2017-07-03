@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
     <title>Playlist Page</title>
     <link rel="stylesheet" href="../css/main.css">
-       
+
   </head>
   <body class="style-scroller">
   <div class="nav">
@@ -18,8 +18,8 @@
     <div class="nav-menu">
       <li><a href="/">Home</a></li>
       <li><a href="/playlist-list">Playlist List</a></li>
-      <li><a href="/create">Create Playlist</a></li>
-      <li><a href="/payment">Payment</a></li>
+      <!-- <li><a href="/create">Create Playlist</a></li>
+      <li><a href="/payment">Payment</a></li> -->
     </div>
   </div>
     <div class="playlist-info row">
@@ -41,7 +41,7 @@
             <img style="display: inline-block" src="<%= items[i].snippet.thumbnails.default.url%>">
             <p style="display: inline-block;vertical-align: top;margin: 10px;"><%= items[i].snippet.title %></p>
            </a>
-          </td>            
+          </td>
           </tr>
         <% }%>
       </table>
