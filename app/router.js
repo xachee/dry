@@ -4,7 +4,7 @@ const router = require('koa-router')();
 const config = require('../config/config');
 const passport = require('koa-passport');
 const YAPI = require('./youtube');
-
+const sq = require("./tables");
 async function main(ctx) {
   await ctx.render('main/index');
 }
@@ -18,11 +18,11 @@ async function playlist_l(ctx){
   var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
   var data = await youApi.getPlaylistData();
   await ctx.render('playlist_list/playlist_list',{playlists:data.items});
-
 }
 
 async function playlist_p(ctx) {
-  var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
+  var user = (await sq.getUser(ctx.state.user.id)).dataValues;
+  var youApi = new YAPI(config, ctx.state.user.accessToken, user.refreshToken);
   var data = await youApi.getPlaylistData();
   var items= await youApi.getPlaylistItems(ctx.params.id);
   for(var i=0;i<data.items.length;i++){
@@ -38,6 +38,8 @@ async function payment(ctx) {
   await ctx.render('paymentPage/Payment');
 }
 async function dashboard(ctx, next) {
+  
+  await sq.upsertUser(ctx.state.user.id,ctx.state.user.accessToken,ctx.state.user.refreshToken);
   await ctx.render('main/index', {user: ctx.state.user});
   await next();
 }
