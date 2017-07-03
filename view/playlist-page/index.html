@@ -8,10 +8,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
     <title>Playlist Page</title>
     <link rel="stylesheet" href="../css/main.css">
+       
   </head>
-  <body>
+  <body class="style-scroller">
   <div class="nav">
-    <h2 class="header_text" style="font-family: Courier New;font-weight: bold;"><img src="../img/music-player.png" alt="Playlist List" id="playlist_list_logo">Playlist Store</h2>
+    <a href="/" style="text-decoration: none">
+      <h2 class="header_text"><img src="img/music-player.png" alt="Playlist List" id="playlist_list_logo">Playlist Store</h2>
+    </a>
     <div class="nav-menu">
       <li><a href="/">Home</a></li>
       <li><a href="/playlist-list">Playlist List</a></li>
@@ -35,8 +38,8 @@
           <tr>
           <td>
           <a href="https://youtube.com/watch?v=<%= items[i].snippet.resourceId.videoId%>">
-            <img src="<%= items[i].snippet.thumbnails.default.url%>">
-            <span><%= items[i].snippet.title %></span>
+            <img style="display: inline-block" src="<%= items[i].snippet.thumbnails.default.url%>">
+            <p style="display: inline-block;vertical-align: top;margin: 10px;"><%= items[i].snippet.title %></p>
            </a>
           </td>            
           </tr>

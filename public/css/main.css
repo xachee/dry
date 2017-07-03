@@ -74,3 +74,29 @@ body{
 /*.nav .nav-menu li:hover{*/
 /*border-bottom: 2px solid #616161;*/
 /*}*/
+/*SCROLLER*/
+.style-scroller::-webkit-scrollbar-track
+{
+    transition: all .5s;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.style-scroller::-webkit-scrollbar
+{
+    transition: all .5s;
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+.style-scroller::-webkit-scrollbar-thumb
+{
+    transition: all .5s;
+    background-color: #2196F3;
+    border-radius: 10px;
+}
+.style-scroller::-webkit-scrollbar-thumb:hover
+{
+    transition: all .5s;
+    background-color: #0074d1;
+}
