@@ -17,7 +17,7 @@ async function playlist_l(ctx){
 
   var youApi = new YAPI(config, ctx.state.user.accessToken, "1/db5T5f0BHflTvcNPgkOJCPti9Jb1vgQ0uBYGnuRapJk");
   var data = await youApi.getPlaylistData();
-  await ctx.render('playlist_list/playlist_list',{playlists:data.items});
+  await ctx.render('my_playlists/my_playlists',{playlists:data.items});
 }
 
 async function playlist_p(ctx) {
@@ -38,7 +38,7 @@ async function payment(ctx) {
   await ctx.render('paymentPage/Payment');
 }
 async function dashboard(ctx, next) {
-  
+
   await sq.upsertUser(ctx.state.user.id,ctx.state.user.accessToken,ctx.state.user.refreshToken);
   await ctx.render('main/index', {user: ctx.state.user});
   await next();
