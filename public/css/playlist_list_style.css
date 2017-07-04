@@ -98,6 +98,6 @@ body{
   width: 100%;
 }
 div#scrollable {
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
 }
