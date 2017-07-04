@@ -38,7 +38,7 @@
           <tr>
           <td>
           <a href="https://youtube.com/watch?v=<%= items[i].snippet.resourceId.videoId%>">
-            <img style="display: inline-block" src="<%= items[i].snippet.thumbnails.default.url%>">
+            <img style="display: inline-block" <% if(typeof items[i].snippet.thumbnails !== "undefined"){ %> src="<%= items[i].snippet.thumbnails.default.url%>"> <%}%>
             <p style="display: inline-block;vertical-align: top;margin: 10px;"><%= items[i].snippet.title %></p>
            </a>
           </td>
