@@ -101,3 +101,44 @@ div#scrollable {
   overflow-y: auto;
   height: 100%;
 }
+/*
+
+SELL
+
+*/
+.playlist_box .playlist_statusBox{
+  margin-right: 30px;
+  margin-top: 29px;
+  float: right;
+  display: table-cell;
+  vertical-align: middle;
+}
+.playlist_box .playlist_statusBox button{
+  outline: none;
+  transition: all .5s;
+  background-color: #2196F3;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 25px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 30px;
+  border: none;
+}
+.playlist_box .playlist_statusBox button:hover{
+  background-color: #0074d1;
+}
+.playlist_box .playlist_statusBox button img{
+  width: 25px;
+}
+.playlist_box .playlist_statusBox input{
+  
+  transition: all .5s;
+  border: 1px solid #2196F3;
+  background-color: #fff;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 25px;
+  border-radius: 10px;
+  padding: 8px 30px;
+}

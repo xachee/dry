@@ -5,6 +5,7 @@
     <link rel="icon" href="img/music-player.png">
     <link rel="stylesheet" href="css/my_playlists_style.css">
     <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <title>My Playlists</title>
   </head>
   <body>
@@ -27,13 +28,35 @@
         </div>
 
         <div class="playlist_list">
+          <script type="text/javascript">
+          $(document).ready(function() {
+            sell_click = true;
+            $('.click-list').click(function () {
+              if(sell_click == false){
+                alert(1);
+              }
+              if(sell_click == true){
+                sell_click = false;
+                box = $(this).parent();
+                $(this).parent().empty();
+                box.append('<button type="button" name="button" class="click-list">Cancel</button>');
+                box.append('<button type="button" name="button" class="click-list">Cancel</button>');
+              }
+            });
+          });
+          </script>
           <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length-1;i++){ %>
-          <a href="/playlist-page/<%= playlists[i].id %> " target="_blank"><div class="playlist_box">
-            <!--<div class="playlist_img" style=" background-image: url(<%= playlists[i].snippet.thumbnails.medium.url %>);"></div>-->
-            <img src="<%= playlists[i].snippet.thumbnails.medium.url %>" alt="" class="playlist_img">
-            <p class="playlist_name" title="<%= playlists[i].snippet.title%>"><%= playlists[i].snippet.title%></p>
+          <div class="playlist_box">
+            <a href="/playlist-page/<%= playlists[i].id %> " target="_blank">
+              <!--<div class="playlist_img" style=" background-image: url(<%= playlists[i].snippet.thumbnails.medium.url %>);"></div>-->
+              <img src="<%= playlists[i].snippet.thumbnails.medium.url %>" alt="" class="playlist_img">
+              <p class="playlist_name" title="<%= playlists[i].snippet.title%>"><%= playlists[i].snippet.title%></p>
+            </a>
+            <div class="playlist_statusBox">
+              <!-- <input type="text" class='playlist_price'> -->
+              <button type="button" name="button" class="click-list">Sell</button>
+            </div>
            </div>
-          </a>
           <% } } %>
         </div>
 
