@@ -48,17 +48,10 @@ async function logout(ctx) {
   ctx.redirect('/');
 }
 
-/*router.get(async function(ctx,next){
- if(ctx.isAuthenticated()){
- return next();
- }else{
- ctx.redirect('/');
- }
- });*/
 router.get('/create', create);
 router.get('/main', main);
 router.get('/', main);
-router.get('/playlist-list', playlist_l);
+router.get('/my-playlists', playlist_l);
 router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
 router.get('/auth/google', passport.authenticate('google', {

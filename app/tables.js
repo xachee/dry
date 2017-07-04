@@ -2,17 +2,25 @@ const Sequelize = require('sequelize');
 const sq=require("./db");
 
 const users = sq.define('users', {
-  google_id: {type :Sequelize.STRING(22), unique:true},
-  accessToken: Sequelize.TEXT,
-  refreshToken:Sequelize.TEXT  
+	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
+ 	google_id: {type :Sequelize.STRING(22), unique:true},
+ 	accessToken: Sequelize.TEXT,
+  	refreshToken:Sequelize.TEXT  
 });
 
 const orders = sq.define('orders', {
-  seller_id: Sequelize.INTEGER,
-  playlist_id:Sequelize.TEXT,
-  owner_id:Sequelize.INTEGER
+	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
+	playlist_id:Sequelize.TEXT,
+  	owner_id:Sequelize.STRING(22)
 });
 
+const playlists = sq.define('playlists', {
+	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
+	playlist_id:Sequelize.TEXT,
+	title:Sequelize.TEXT,
+	description:Sequelize.TEXT,
+  	owner_id:Sequelize.STRING(22)
+});
 /*function addUser(accessToken,refreshToken,id){
 	return	sq.sync().then(() => 
 		  	users.create({
