@@ -30,7 +30,7 @@
                 <% if( typeof user !== 'undefined'){ %>
 
                 <div class="about" >
-                    <img style="border-radius: 10px;width: 100%" src=" <%=user.photos[0].value.split("=")[0]+"=250"%> ">
+                    <img style="border-radius: 10px;width: 100%" src=" <%=user.photos.split("=")[0]+"=250"%> ">
                     <p id = "user_name"> <%=user.displayName%> </p>
                     <div id="menu">
                         <ul class="menu-link">
