@@ -165,14 +165,13 @@
               });
             });
           </script>
-          <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length-1;i++){ %>
+          <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length;i++){ %>
           <div class="playlist_box">
-            <a href="/playlist-page/<%= playlists[i].id %> " target="_blank">
-              <!--<div class="playlist_img" style=" background-image: url(<%= playlists[i].snippet.thumbnails.medium.url %>);"></div>-->
-              <img src="<%= playlists[i].snippet.thumbnails.medium.url %>" alt="" class="playlist_img">
-              <p class="playlist_name" title="<%= playlists[i].snippet.title%>"><%= playlists[i].snippet.title%></p>
+            <a href="/playlist-page/<%= playlists[i].youtubeId %> " target="_blank">
+              <img src="<%= playlists[i].thumbnail %>" alt="" class="playlist_img">
+              <p class="playlist_name" title="<%= playlists[i].title%>"><%= playlists[i].title%></p>
             </a>
-            <div class="playlist_statusBox" playlist-id = "<%= playlists[i].id %>">
+            <div class="playlist_statusBox" playlist-id = "<%= playlists[i].youtubeId %>">
               <button type="button" name="button" class="click-list">Sell</button>
             </div>
            </div>

@@ -1,74 +1,41 @@
 const Sequelize = require('sequelize');
-const sq=require("./db");
+const sq = require("./db");
 
-const users = sq.define('users', {
-	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
- 	google_id: {type :Sequelize.STRING(22), unique:true},
- 	accessToken: Sequelize.TEXT,
-  	refreshToken:Sequelize.TEXT  
+const User = sq.define('users', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  googleId: {type: Sequelize.STRING(22), unique: true},
+  accessToken: Sequelize.TEXT,
+  refreshToken: Sequelize.TEXT,
+  photos: Sequelize.TEXT,
+  displayName: Sequelize.TEXT
 });
 
-const orders = sq.define('orders', {
-	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
-	playlist_id:Sequelize.TEXT,
-  	owner_id:Sequelize.STRING(22)
+const Order = sq.define('orders', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  playlistId: Sequelize.TEXT,
+  ownerId: Sequelize.STRING(22)
 });
 
-const playlists = sq.define('playlists', {
-	id:{type:Sequelize.INTEGER,primaryKey: true,autoIncrement: true},
-	playlist_id:Sequelize.TEXT,
-	title:Sequelize.TEXT,
-	description:Sequelize.TEXT,
-  	owner_id:Sequelize.STRING(22)
+const Sale = sq.define('sales', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  playlistId: Sequelize.TEXT,
+  price: Sequelize.FLOAT
 });
-/*function addUser(accessToken,refreshToken,id){
-	return	sq.sync().then(() => 
-		  	users.create({
-		    accessToken: accessToken,
-		    refreshToken: refreshToken,
-		    google_id:id
-		  }));
-}
-*/
-function getUser(id){
-	return sq.sync().then(() =>  users.findOne({
-		where: {
-		    google_id: id
-	  	}
-	}));
-}
-/*
-function updateUser(id,accessToken,refreshToken){
-	if(refreshToken!="undefined" && refreshToken!="" && refreshToken!=null ){
-		var updates={
-			accessToken:accessToken,
-			refreshToken:refreshToken
-		}
-	}
-	return users.update(
-		updates,
-		{
-			where: {
-		    google_id: id
-	  	}
-	  }
-	);
-}*/
 
-function upsertUser(id,accessToken,refreshToken){
-	if(refreshToken!="undefined" && refreshToken!="" && refreshToken!=null ){
-		var updates={
-			accessToken:accessToken,
-			refreshToken:refreshToken,
-			google_id:id
-		}
-	}else{
-		var updates={
-			accessToken:accessToken,
-			google_id:id
-		}
-	}
-	return sq.sync().then(() =>users.upsert(updates));
-}
+const Playlist = sq.define('playlists', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  title: Sequelize.TEXT,
+  description: Sequelize.TEXT,
+  youtubeId: {type: Sequelize.STRING(35), unique: true},
+  status: {type: Sequelize.STRING(9), defaultValue: "youtube"},
+  videos: Sequelize.TEXT,
+  thumbnail: Sequelize.TEXT,
+  userId: Sequelize.STRING(22)
+});
 
-module.exports={sq:sq,upsertUser:upsertUser,getUser:getUser};
+User.sync();
+Playlist.sync();
+Sale.sync();
+Order.sync();
+
+module.exports = {User, Order, Sale, Playlist};
