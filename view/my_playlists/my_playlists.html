@@ -64,24 +64,28 @@
                 });
 
                 $('.playlist_price').bind("enterKey",function(e){
-                  val = parseInt($('.playlist_price').val());
-                  if (val == 0)
-                    value = "Free";
-                  else
-                    value = "$" + val;
-                  $(box).find( ".playlist_price_cancel").prop('disabled', true);
-                  $(box).find( ".playlist_price").prop('disabled', true);
-                  $(box).css({"opacity" : "0.5"});
-                  //  CALLBACK DB PRICE
-                  setTimeout(function(){
-                    $(box).empty();
-                    $(box).css({"opacity" : "1"});
-                    box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
-                    box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
-                    sell_click = true;
-                    sell_click_edit = true;
-                  }, 1000);
+                  if($('.playlist_price').val().replace(/^\s+|\s+$/g, "").length != 0){
+                    val = parseInt($('.playlist_price').val());
+                    if (val == 0)
+                      value = "Free";
+                    else
+                      value = "$" + val;
+                    $(box).find( ".playlist_price_cancel").prop('disabled', true);
+                    $(box).find( ".playlist_price").prop('disabled', true);
+                    $(box).css({"opacity" : "0.5"});
+                    //Promise here
+                    //replace it whit setTimeout on line 78
+                    setTimeout(function(){
+                      $(box).empty();
+                      $(box).css({"opacity" : "1"});
+                      box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
+                      box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                      sell_click = true;
+                      sell_click_edit = true;
+                    }, 1000);
+                    //Promise end on line 78
 
+                  }
                 });
 
                 $('.playlist_price').keyup(function(e){
@@ -120,24 +124,27 @@
                 });
 
                 $('.playlist_price').bind("enterKey",function(e){
-                  val = parseInt($('.playlist_price').val());
-                  alert(val);
-                  if (val == 0)
-                    value = "Free";
-                  else
-                    value = "$" + val;
-                  $(box).find( ".playlist_price_cancel").prop('disabled', true);
-                  $(box).find( ".playlist_price").prop('disabled', true);
-                  $(box).css({"opacity" : "0.5"});
-                  //  CALLBACK DB PRICE
-                  setTimeout(function(){
-                    $(box).empty();
-                    $(box).css({"opacity" : "1"});
-                    box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
-                    box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
-                    sell_click = true;
-                    sell_click_edit = true;
-                  }, 1000);
+                  if($('.playlist_price').val().replace(/^\s+|\s+$/g, "").length != 0){
+                    val = parseInt($('.playlist_price').val());
+                    if (val == 0)
+                      value = "Free";
+                    else
+                      value = "$" + val;
+                    $(box).find( ".playlist_price_cancel").prop('disabled', true);
+                    $(box).find( ".playlist_price").prop('disabled', true);
+                    $(box).css({"opacity" : "0.5"});
+                    //Promise here
+                    //replace it whit setTimeout on line 138
+                    setTimeout(function(){
+                      $(box).empty();
+                      $(box).css({"opacity" : "1"});
+                      box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
+                      box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                      sell_click = true;
+                      sell_click_edit = true;
+                    }, 1000);
+                    //Promise end on line 138
+                  }
                 });
 
                 $('.playlist_price').keyup(function(e){
