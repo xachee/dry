@@ -29,21 +29,127 @@
 
         <div class="playlist_list">
           <script type="text/javascript">
+            function isNumberKey(evt)
+           {
+              var charCode = (evt.which) ? evt.which : event.keyCode
+              if (charCode != 46 && charCode > 31
+                && (charCode < 48 || charCode > 57))
+                 return false;
+
+              return true;
+           }
           $(document).ready(function() {
             sell_click = true;
-            $('.click-list').click(function () {
+            sell_click_edit = true;
+            val = 0;
+            $(document).on('click', '.click-list', function(){
               if(sell_click == false){
-                alert(1);
+                alert("Sorry, But you need either set a price or cancel process.\n© Copyright Playlist Store 2017");
               }
               if(sell_click == true){
+                sell_click_edit = false;
                 sell_click = false;
-                box = $(this).parent();
+                var box = $(this).parent();
                 $(this).parent().empty();
-                box.append('<button type="button" name="button" class="click-list">Cancel</button>');
-                box.append('<button type="button" name="button" class="click-list">Cancel</button>');
+                box.append("<span style='color: #2196f3;font-size: 25px;margin-right: 5px;'>$</span><input type='text' autofocus class='playlist_price' size='1' placeholder='Price' onkeypress='return isNumberKey(event)' maxlength = '10'>");
+                box.append('<button type="button" name="button" class="playlist_price_cancel">Cancel</button>');
+                $(".playlist_price").focus();
+                $('.playlist_statusBox button').click(function () {
+                  if($(this).attr('class') == 'playlist_price_cancel'){
+                    $(this).parent().empty();
+                    box.append('<button type="button" name="button" class="click-list">Sell</button>');
+                    sell_click = true;
+                    sell_click_edit = true;
+                  }
+                });
+
+                $('.playlist_price').bind("enterKey",function(e){
+                  val = parseInt($('.playlist_price').val());
+                  if (val == 0)
+                    value = "Free";
+                  else
+                    value = "$" + val;
+                  $(box).find( ".playlist_price_cancel").prop('disabled', true);
+                  $(box).find( ".playlist_price").prop('disabled', true);
+                  $(box).css({"opacity" : "0.5"});
+                  //  CALLBACK DB PRICE
+                  setTimeout(function(){
+                    $(box).empty();
+                    $(box).css({"opacity" : "1"});
+                    box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
+                    box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                    sell_click = true;
+                    sell_click_edit = true;
+                  }, 1000);
+
+                });
+
+                $('.playlist_price').keyup(function(e){
+                    if(e.keyCode == 13)
+                    {
+                        $(this).trigger("enterKey");
+                    }
+                });
+
+              }
+            });
+            // ************************//
+            // PLAYLIST PRICE EDIT PART//
+            // ************************//
+            $(document).on('click', '.playlist_price_edit', function(){
+              if(sell_click_edit == false){
+                alert("Sorry, But you need either set a price or cancel process.\n© Copyright Playlist Store 2017");
+              }
+              if(sell_click_edit == true){
+
+                sell_click = false;
+                sell_click_edit = false;
+                var box = $(this).parent();
+                $(this).parent().empty();
+                box.append("<span style='color: #2196f3;font-size: 25px;margin-right: 5px;'>$</span><input type='text' autofocus class='playlist_price' size='1' placeholder='Price' onkeypress='return isNumberKey(event)' maxlength = '10'>");
+                box.append('<button type="button" name="button" class="playlist_price_cancel">Cancel Selling</button>');
+                $(".playlist_price").focus();
+
+                $('.playlist_statusBox button').click(function () {
+                  if($(this).attr('class') == 'playlist_price_cancel'){
+                    $(this).parent().empty();
+                    box.append('<button type="button" name="button" class="click-list">Sell</button>');
+                    sell_click_edit = true;
+                    sell_click = true;
+                  }
+                });
+
+                $('.playlist_price').bind("enterKey",function(e){
+                  val = parseInt($('.playlist_price').val());
+                  alert(val);
+                  if (val == 0)
+                    value = "Free";
+                  else
+                    value = "$" + val;
+                  $(box).find( ".playlist_price_cancel").prop('disabled', true);
+                  $(box).find( ".playlist_price").prop('disabled', true);
+                  $(box).css({"opacity" : "0.5"});
+                  //  CALLBACK DB PRICE
+                  setTimeout(function(){
+                    $(box).empty();
+                    $(box).css({"opacity" : "1"});
+                    box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
+                    box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                    sell_click = true;
+                    sell_click_edit = true;
+                  }, 1000);
+                });
+
+                $('.playlist_price').keyup(function(e){
+                    if(e.keyCode == 13)
+                    {
+                        $(this).trigger("enterKey");
+                    }
+                });
               }
             });
           });
+
           </script>
           <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length-1;i++){ %>
           <div class="playlist_box">
@@ -53,7 +159,6 @@
               <p class="playlist_name" title="<%= playlists[i].snippet.title%>"><%= playlists[i].snippet.title%></p>
             </a>
             <div class="playlist_statusBox">
-              <!-- <input type="text" class='playlist_price'> -->
               <button type="button" name="button" class="click-list">Sell</button>
             </div>
            </div>
