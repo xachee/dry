@@ -5,6 +5,7 @@ const config = require('../config/config');
 const passport = require('koa-passport');
 const YAPI = require('./youtube');
 const {User, Order, Sale, Playlist} = require("./tables");
+const koaBody = require('koa-body')();
 
 async function main(ctx) {
     await ctx.render('main/index');
@@ -20,12 +21,23 @@ async function playlist_l(ctx) {
             userId: ctx.state.user.googleId
         }
     });
-    var data=[]
+    var pls=[];
+    var prices=[];
     for(var i in playlists){
-      data.push(playlists[i].dataValues);
+      pls.push(playlists[i].dataValues);
+      var priceD=await Sale.findOne({where:{playlistId:playlists[i].dataValues.youtubeId}});
+      if(priceD!= null){
+        var price=priceD.dataValues.price;
+      }else{
+        var price=null;
+      }
+      //var price=priceD.dataValues.price;
+      prices.push({id:playlists[i].dataValues.youtubeId,price:price});
     }
+    
     await ctx.render('my_playlists/my_playlists', {
-        playlists: playlists
+        playlists: pls,
+        prices:prices
     });
 }
 
@@ -72,6 +84,21 @@ router.get('/auth/google', passport.authenticate('google', {
 }));
 
 router.get('/auth/google/callback',passport.authenticate('google',{ successRedirect: '/dashboard', failureRedirect: '/' }));
+
+router.post('/sell', koaBody, async (ctx) => {
+  console.log(ctx.request.body);
+    try{
+      if(ctx.request.body.price==-1){
+        await Sale.destroy({where:{playlistId:ctx.request.body.playlistId}});
+      }else{
+        await Sale.upsert(ctx.request.body);
+      }
+      ctx.body="OK";
+    }catch(err){
+      console.log(err);
+      ctx.body="Err";
+    }
+  });
 
 router.get('/logout', logout);
 

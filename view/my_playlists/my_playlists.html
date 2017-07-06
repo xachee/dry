@@ -30,6 +30,13 @@
 
         <div class="playlist_list">
           <script type="text/javascript">
+            var prices={};
+            <% for(i in prices){
+              if(prices[i].price != null){ %>
+                prices["<%=prices[i].id%>"]=<%= prices[i].price %>;
+              <%
+              }
+            } %>
             function isNumberKey(evt)
             {
               var charCode = (evt.which) ? evt.which : event.keyCode
@@ -68,7 +75,6 @@
                     if($('.playlist_price').val().replace(/^\s+|\s+$/g, "").length != 0){
                       val = Number($('.playlist_price').val());
                       p_id = $(box).attr("playlist-id");
-                      alert(p_id);
                       if (val == 0)
                         value = "Free";
                       else
@@ -78,20 +84,24 @@
                       $(box).css({"opacity" : "0.5"});
                       //Promise here
                       $.post(
-                         "",//url
+                         "/sell",//url
                          {//data
                              price: val,
-                             playlist_id: p_id
+                             playlistId: p_id
                          },
                          function(data, status){//Callback
-                             alert("Data: " + data + "\nStatus: " + status);
-                             $(box).empty();
+                             //alert("Data: " + data + "\nStatus: " + status);
+                          if(data !="OK"){
+                            value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
+                            alert("Error: Try again");
+                           }
+                           $(box).empty();
                              $(box).css({"opacity" : "1"});
                              box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
                              box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
                              sell_click = true;
                              sell_click_edit = true;
-                         }
+                        }
                        );
                     }
                   });
@@ -124,11 +134,25 @@
 
                   $('.playlist_statusBox button').click(function () {
                     if($(this).attr('class') == 'playlist_price_cancel'){
-                      $(this).parent().empty();
-                      box.append('<button type="button" name="button" class="click-list">Sell</button>');
-                      sell_click_edit = true;
-                      sell_click = true;
-                    }
+                      p_id = $(box).attr("playlist-id");
+                      that=this;
+                       $.post(
+                         "/sell",//url
+                         {//data
+                             price: -1,
+                             playlistId: p_id
+                         },
+                         function(data, status){
+                          if(data !="OK"){
+                            alert("Error:Try Letter");
+                          }else{
+                          $(that).parent().empty();
+                          box.append('<button type="button" name="button" class="click-list">Sell</button>');
+                          }
+                          sell_click_edit = true;
+                          sell_click = true;
+                        });
+                      }
                   });
 
                   $('.playlist_price').bind("enterKey",function(e){
@@ -143,14 +167,27 @@
                       $(box).css({"opacity" : "0.5"});
                       //Promise here
                       //replace it whit setTimeout on line 138
-                      setTimeout(function(){
-                        $(box).empty();
-                        $(box).css({"opacity" : "1"});
-                        box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
-                        box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
-                        sell_click = true;
-                        sell_click_edit = true;
-                      }, 1000);
+                      p_id = $(box).attr("playlist-id");
+                      $.post(
+                         "/sell",//url
+                         {//data
+                             price: val,
+                             playlistId: p_id
+                         },
+                        function(data,status){
+                          if(data !="OK"){
+                            value= typeof prices[p_id] !== "undefined" ? "$"+ prices[p_id] : 0;
+                            alert("Error: Try again");
+                          }
+                          $(box).empty();
+                            $(box).css({"opacity" : "1"});
+                            box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
+                            box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                            sell_click = true;
+                            sell_click_edit = true;
+                        }
+                       );
+                      
                       //Promise end on line 138
                     }
                   });
@@ -172,7 +209,14 @@
               <p class="playlist_name" title="<%= playlists[i].title%>"><%= playlists[i].title%></p>
             </a>
             <div class="playlist_statusBox" playlist-id = "<%= playlists[i].youtubeId %>">
+              <%if(prices[i].price == null){%>
               <button type="button" name="button" class="click-list">Sell</button>
+              <%}else{%>
+              <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>
+              <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
+                $<%= prices[i].price%>
+              </span>
+              <%}%>
             </div>
            </div>
           <% } } %>
