@@ -90,8 +90,25 @@ router.post('/sell', koaBody, async (ctx) => {
     try{
       if(ctx.request.body.price==-1){
         await Sale.destroy({where:{playlistId:ctx.request.body.playlistId}});
+        await Playlist.upsert({
+          status:"youtube",
+          youtubeId:ctx.request.body.playlistId
+        })
       }else{
         await Sale.upsert(ctx.request.body);
+        var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+        var items = await youApi.getPlaylistItems(ctx.request.body.playlistId);
+            var videos = [];
+            for (var j in items.items) {
+                videos.push(items.items[j].snippet.resourceId.videoId);
+            }
+        videos = videos.join(",");
+
+        await Playlist.upsert({
+          status:"sale",
+          videos:videos,
+          youtubeId:ctx.request.body.playlistId
+        });
       }
       ctx.body="OK";
     }catch(err){

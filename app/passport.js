@@ -36,13 +36,6 @@ passport.use(new Strategy(strategyConfig,
         var data = await youApi.getPlaylistData();
 
         for (var i = 0; i < data.items.length - 1; i++) {
-            // var items = await youApi.getPlaylistItems(data.items[i].id);
-            // var videos = [];
-            // for (var j in items.items) {
-            //     videos.push(items.items[j].snippet.resourceId.videoId);
-            // }
-            // videos = videos.join(",");
-            // console.log(videos);
 
             var playlist = {
                 title: data.items[i].snippet.title,
