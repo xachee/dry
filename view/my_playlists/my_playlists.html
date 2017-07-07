@@ -21,6 +21,7 @@
           <div class="nav-menu">
             <li><a href="/">Home</a></li>
             <% if( typeof user !== 'undefined'){ %>
+            <li><a href="/store">Store</a></li>
       			<li class="active_page">My Playlists</li>
       			<% } %>
             <!-- <li><a href="/create">Create Playlist</a></li>
@@ -126,9 +127,13 @@
 
                   sell_click = false;
                   sell_click_edit = false;
+                  var playlistPrice = $(this).attr("playlist-price");
+                  if(playlistPrice === undefined){
+                    playlistPrice = "";
+                  }
                   var box = $(this).parent();
                   $(this).parent().empty();
-                  box.append("<span style='color: #2196f3;font-size: 25px;margin-right: 5px;'>$</span><input type='text' autofocus class='playlist_price' size='1' placeholder='Price' onkeypress='return isNumberKey(event)' maxlength = '10'>");
+                  box.append("<span style='color: #2196f3;font-size: 25px;margin-right: 5px;'>$</span><input type='text' autofocus class='playlist_price' size='1' placeholder='Price' onkeypress='return isNumberKey(event)' maxlength = '10' value='" + playlistPrice + "'>");
                   box.append('<button type="button" name="button" class="playlist_price_cancel">Cancel Selling</button>');
                   $(".playlist_price").focus();
 
@@ -187,7 +192,7 @@
                             sell_click_edit = true;
                         }
                        );
-                      
+
                       //Promise end on line 138
                     }
                   });
@@ -212,7 +217,7 @@
               <%if(prices[i].price == null){%>
               <button type="button" name="button" class="click-list">Sell</button>
               <%}else{%>
-              <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>
+              <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;" playlist-price="<%= prices[i].price%>"><img src="img/pencil-edit-button.png" alt="Edit"></button>
               <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
                 $<%= prices[i].price%>
               </span>

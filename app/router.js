@@ -34,7 +34,7 @@ async function playlist_l(ctx) {
       //var price=priceD.dataValues.price;
       prices.push({id:playlists[i].dataValues.youtubeId,price:price});
     }
-    
+
     await ctx.render('my_playlists/my_playlists', {
         playlists: pls,
         prices:prices
@@ -59,6 +59,10 @@ async function payment(ctx) {
     await ctx.render('paymentPage/Payment');
 }
 
+async function store(ctx) {
+    await ctx.render('store/store');
+}
+
 async function dashboard(ctx, next) {
     await ctx.render('main/index', {
         user: ctx.state.user
@@ -77,6 +81,7 @@ router.get('/', main);
 router.get('/my-playlists', playlist_l);
 router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
+router.get('/store', store);
 router.get('/auth/google', passport.authenticate('google', {
     scope: config.google.scope,
     accessType: config.google.accessType,
