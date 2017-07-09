@@ -60,14 +60,33 @@ async function payment(ctx) {
 }
 
 async function store(ctx) {
+    var ords=await Order.findAll({
+      where:{
+        ownerId:ctx.state.user.googleId
+      }
+    })
+    var ordIds=[];
+    for(var i in ords){
+      ordIds.push(ords[i].dataValues.playlistId);
+    }
     var playlists = await Playlist.findAll({
         where: {
-            status: "sale"
+            status: "sale",
+            userId:{
+              $not :ctx.state.user.googleId
+            },
+            id:{
+              $notIn:ordIds
+            }
         }
     });
 
+    var pls =[];
+    for(var i in playlists){
+      pls.push(playlists[i].dataValues);
+    }
     await ctx.render('store/store',{
-
+      playlists:pls
     });
 }
 
@@ -115,7 +134,7 @@ router.post('/sell', koaBody, async (ctx) => {
     console.log("We get price ---- $" + price);
     // CODE
     // Insert a new row in table Sales
-    await Sale.create(
+    await Sale.upsert(
       {playlistId: id, price: price}
     );
 
