@@ -82,11 +82,20 @@ async function store(ctx) {
     });
 
     var pls =[];
+    var prs=[];
     for(var i in playlists){
       pls.push(playlists[i].dataValues);
+      var price=(await Sale.findOne({
+        where:{
+          playlistId:playlists[i].dataValues.id
+        }
+      })).dataValues.price;
+      prs.push({price:price});
     }
+
     await ctx.render('store/store',{
-      playlists:pls
+      playlists:pls,
+      prices:prs
     });
 }
 
@@ -102,6 +111,19 @@ async function logout(ctx) {
     ctx.redirect('/');
 }
 
+async function buy(ctx){
+  try{
+    await Order.create({
+      playlistId:ctx.request.body.id,
+      ownerId:ctx.state.user.googleId
+    })
+    ctx.body="OK";
+  }catch(err){
+    console.log(err);
+    ctx.body="err";
+  }
+}
+
 router.get('/create', create);
 router.get('/main', main);
 router.get('/', main);
@@ -109,6 +131,8 @@ router.get('/my-playlists', playlist_l);
 router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
 router.get('/store', store);
+router.get('/buy',koaBody,buy);
+
 router.get('/auth/google', passport.authenticate('google', {
     scope: config.google.scope,
     accessType: config.google.accessType,
@@ -127,7 +151,7 @@ router.post('/sell', koaBody, async (ctx) => {
 
   let id = ctx.request.body.id;
   let price = ctx.request.body.price;
-
+  console.log(id);
   // MAIN CODE
   try {
     // CONSOLE
