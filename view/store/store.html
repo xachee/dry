@@ -10,21 +10,24 @@
   </head>
   <body>
     <div class="main">
-      <!-- NAVIGATION -->
-      <div class="nav">
-          <a href="/" style="text-decoration: none">
-              <h2 class="header_text"><img src="img/music-player.png" alt="Playlist List" id="playlist_list_logo">Playlist Store</h2>
-          </a>
-          <div class="nav-menu">
-              <li><a href="/">Home</a></li>
-              <% if( typeof user !== 'undefined'){ %>
-              <li class="active_page">Store</li>
-              <li><a href="/my-playlists">My Playlists</a></li>
-              <% } %>
-              <!-- <li><a href="/payment">Payment</a></li> -->
-          </div>
-      </div>
-        <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length;i++){ %>
+      <div id="scrollable" class="style-scroller">
+
+        <!-- NAVIGATION -->
+        <div class="nav">
+            <a href="/" style="text-decoration: none">
+                <h2 class="header_text"><img src="img/music-player.png" alt="Playlist List" id="playlist_list_logo">Playlist Store</h2>
+            </a>
+            <div class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <% if( typeof user !== 'undefined'){ %>
+                <li class="active_page">Store</li>
+                <li><a href="/my-playlists">My Playlists</a></li>
+                <% } %>
+                <!-- <li><a href="/payment">Payment</a></li> -->
+            </div>
+        </div>
+        <div class="playlist_list">
+          <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length;i++){ %>
           <div class="playlist_box">
             <a href="/playlist-page/<%= playlists[i].youtubeId %> " target="_blank">
               <img src="<%= playlists[i].thumbnail %>" alt="" class="playlist_img">
@@ -33,6 +36,8 @@
             </div>
            </div>
           <% } } %>
+        </div>
+      </div>
     </div>
   </body>
 </html>
