@@ -60,7 +60,15 @@ async function payment(ctx) {
 }
 
 async function store(ctx) {
-    await ctx.render('store/store');
+    var playlists = await Playlist.findAll({
+        where: {
+            status: "sale"
+        }
+    });
+
+    await ctx.render('store/store',{
+
+    });
 }
 
 async function dashboard(ctx, next) {
@@ -145,7 +153,7 @@ router.post('/sell', koaBody, async (ctx) => {
 // ------------------------ //
 // Sale cancelation process //
 // ------------------------ //
-router.get('/cancelSale', koaBody, async (ctx) => {
+router.post('/cancelSale', koaBody, async (ctx) => {
   // CONSOLES
   console.log("////////////// Canceling playlist sale //////////////////");
   console.log(ctx.request.body);
@@ -158,10 +166,11 @@ router.get('/cancelSale', koaBody, async (ctx) => {
     );
     // Playlist status change process
     await Playlist.update(
-      {status: "youtube"},
+      {status: "deleted"},
       {where: {id: ctx.request.body.id}}
     );
     // CODE - end
+    ctx.body="OK";
   }
   catch(err) {
     // CONSOLE
