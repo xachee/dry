@@ -214,7 +214,7 @@
               <p class="playlist_name" title="<%= playlists[i].title%>"><%= playlists[i].title%></p>
             </a>
             <div class="playlist_statusBox" playlist-id = "<%= playlists[i].id %>">
-              <%if(prices[i].price == null){%>
+            <%if(prices[i].price == null){%>
               <button type="button" name="button" class="click-list">Sell</button>
               <%}else{%>
               <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;" playlist-price="<%= prices[i].price%>"><img src="img/pencil-edit-button.png" alt="Edit"></button>
@@ -225,8 +225,8 @@
             </div>
            </div>
           <% } };%>
+
           <% if(typeof boughtPlaylists !== "undefined"){ for(var i =0;i < boughtPlaylists.length;i++){ %>
-          
           <div class="playlist_box">
             <a href="/playlist-page/<%= boughtPlaylists[i].youtubeId %> " target="_blank">
               <img src="<%= boughtPlaylists[i].thumbnail %>" alt="" class="playlist_img">
@@ -238,9 +238,7 @@
               </span>
             </div>
            </div>
-
-          <% } } %>
-
+          <% } };%>
         </div>
 
       </div>

@@ -3,7 +3,7 @@ const passport = require('koa-passport');
 const Strategy = require('passport-google-oauth20').Strategy;
 const config = require('../config/config');
 const YAPI = require('./youtube');
-const {User,Playlist} = require('./tables');
+const {User,Playlist,Copy} = require('./tables');
 
 const strategyConfig = {
     clientID: config.google.clientID,
@@ -37,16 +37,23 @@ passport.use(new Strategy(strategyConfig,
 
         for (var i = 0; i < data.items.length - 1; i++) {
 
-            var playlist = {
-                title: data.items[i].snippet.title,
-                description: data.items[i].snippet.description,
-                youtubeId: data.items[i].id,
-                videos: '',
-                thumbnail: data.items[i].snippet.thumbnails.medium.url,
-                userId: userGet.googleId
-            };
+            var stat=await Copy.findOne({
+                where:{
+                    copyId:data.items[i].id
+                }
+            })
+            if(!stat){
+                var playlist = {
+                    title: data.items[i].snippet.title,
+                    description: data.items[i].snippet.description,
+                    youtubeId: data.items[i].id,
+                    videos: '',
+                    thumbnail: data.items[i].snippet.thumbnails.medium.url,
+                    userId: userGet.googleId
+                };
 
-            await Playlist.upsert(playlist);
+                await Playlist.upsert(playlist);
+            }
         }
 
         return done(null, user);

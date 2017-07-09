@@ -33,9 +33,24 @@ const Playlist = sq.define('playlists', {
   userId: Sequelize.STRING(22)
 });
 
+const Copy = sq.define('copies', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  baseId: Sequelize.TEXT,
+  copyId: Sequelize.TEXT
+});
+
+const Video = sq.define('videos', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  videoId: {type: Sequelize.STRING(12), unique: true},
+  title: Sequelize.TEXT,
+  thumbnail: Sequelize.TEXT
+});
+
 User.sync();
 Playlist.sync();
 Sale.sync();
 Order.sync();
+Copy.sync();
+Video.sync();
 
-module.exports = {User, Order, Sale, Playlist};
+module.exports = {User, Order, Sale, Playlist,Copy,Video};

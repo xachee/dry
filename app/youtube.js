@@ -70,9 +70,9 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
           privacyStatus: 'private'
           } 
         }
-      },function (result) {
+      },function (err,result) {
         if (result) {
-         res();
+         res(result.id);
         }
         else{
           rej();
@@ -95,7 +95,7 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
             }
           },
         }
-      },function (result) {
+      },function (err,result) {
         if (result) {
          res();
         }

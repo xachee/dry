@@ -4,7 +4,7 @@ const router = require('koa-router')();
 const config = require('../config/config');
 const passport = require('koa-passport');
 const YAPI = require('./youtube');
-const {User, Order, Sale, Playlist} = require("./tables");
+const {User, Order, Sale, Playlist,Copy,Video} = require("./tables");
 const koaBody = require('koa-body')();
 
 async function main(ctx) {
@@ -62,16 +62,50 @@ async function playlist_l(ctx) {
 }
 
 async function playlist_p(ctx) {
-    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
-    var items = await youApi.getPlaylistItems(ctx.params.id);
-    var info = await Playlist.findOne({
+  var videos = await Playlist.findOne({
+    where:{
+      youtubeId:ctx.params.id
+    }
+  });
+  var info = await Playlist.findOne({
         where: {
             youtubeId: ctx.params.id
         }
     });
+  if(videos){
+    var items=[];
+    var vid=videos.dataValues.videos.split(",");
+    for(var i in vid){
+      var v=await Video.findOne({
+        where:{
+          videoId:vid[i]
+        }
+      });
+      var title=v.dataValues.title;
+      var thumb=v.dataValues.thumbnail;
+      items.push({
+        snippet:{
+          title:title,
+          thumbnails:{
+            default:{
+              url:thumb
+            }
+          },
+          resourceId:{
+            videoId:vid[i]
+          }
+        }
+      })
+    }
+  }else{
+    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+    var items = (await youApi.getPlaylistItems(ctx.params.id)).items;
+    
+  }
+
     await ctx.render('playlist-page/index', {
         info: info,
-        items: items.items
+        items: items
     });
 }
 
@@ -137,6 +171,35 @@ async function buy(ctx){
       playlistId:ctx.request.body.id,
       ownerId:ctx.state.user.googleId
     })
+    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+
+    var playlist=(await Playlist.findOne({
+      where:{
+        id:ctx.request.body.id
+      }
+    })).dataValues;
+
+    var newId = await youApi.insertPlaylist({
+      title:playlist.title,
+      description:playlist.description
+    });
+
+    var videos=playlist.videos.split(",");
+    for(var i in videos){
+      await youApi.insertVideo({
+        pid:newId,
+        ptitle:playlist.title,
+        vid:videos[i]
+      })
+    }
+
+    await Copy.create({
+      baseId:playlist.id,
+      copyId:newId
+    })
+
+    
+
     ctx.body="OK";
   }catch(err){
     console.log(err);
@@ -193,13 +256,18 @@ router.post('/sell', koaBody, async (ctx) => {
     var videos = [];
     for (var j in items.items) {
         videos.push(items.items[j].snippet.resourceId.videoId);
+        await Video.upsert({
+          videoId:items.items[j].snippet.resourceId.videoId,
+          title:items.items[j].snippet.title,
+          thumbnail:items.items[j].snippet.thumbnails.default.url
+        })
     }
     videos = videos.join(",");
 
     // Playlist status changing process and video id inserting
     await Playlist.update(
       {status:"sale", videos: videos},
-      {where: {id: id}}
+      {where: {id: id,userId:ctx.state.user.googleId}}
     );
 
     // Massage
