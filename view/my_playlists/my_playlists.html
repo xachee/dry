@@ -88,11 +88,11 @@
                          "/sell",//url
                          {//data
                              price: val,
-                             playlistId: p_id
+                             id: p_id
                          },
                          function(data, status){//Callback
                              //alert("Data: " + data + "\nStatus: " + status);
-                          if(data !="OK"){
+                          if(data != 'OK'){
                             value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
                             alert("Error: Try again");
                            }
@@ -142,10 +142,10 @@
                       p_id = $(box).attr("playlist-id");
                       that=this;
                        $.post(
-                         "/sell",//url
+                         "/cancelSale",//url
                          {//data
-                             price: -1,
-                             playlistId: p_id
+                             price: "cancelPlaylist",
+                             id: p_id
                          },
                          function(data, status){
                           if(data !="OK"){
@@ -177,7 +177,7 @@
                          "/sell",//url
                          {//data
                              price: val,
-                             playlistId: p_id
+                             id: p_id
                          },
                         function(data,status){
                           if(data !="OK"){
@@ -213,7 +213,7 @@
               <img src="<%= playlists[i].thumbnail %>" alt="" class="playlist_img">
               <p class="playlist_name" title="<%= playlists[i].title%>"><%= playlists[i].title%></p>
             </a>
-            <div class="playlist_statusBox" playlist-id = "<%= playlists[i].youtubeId %>">
+            <div class="playlist_statusBox" playlist-id = "<%= playlists[i].id %>">
               <%if(prices[i].price == null){%>
               <button type="button" name="button" class="click-list">Sell</button>
               <%}else{%>

@@ -25,7 +25,7 @@ async function playlist_l(ctx) {
     var prices=[];
     for(var i in playlists){
       pls.push(playlists[i].dataValues);
-      var priceD=await Sale.findOne({where:{playlistId:playlists[i].dataValues.youtubeId}});
+      var priceD = await Sale.findOne({where:{playlistId: playlists[i].dataValues.id}});
       if(priceD!= null){
         var price=priceD.dataValues.price;
       }else{
@@ -90,37 +90,87 @@ router.get('/auth/google', passport.authenticate('google', {
 
 router.get('/auth/google/callback',passport.authenticate('google',{ successRedirect: '/dashboard', failureRedirect: '/' }));
 
+// ------------ //
+// Sale process //
+// ------------ //
 router.post('/sell', koaBody, async (ctx) => {
+  // CONSOLES
+  console.log("////////////// Starting sell process //////////////////");
   console.log(ctx.request.body);
-    try{
-      if(ctx.request.body.price==-1){
-        await Sale.destroy({where:{playlistId:ctx.request.body.playlistId}});
-        await Playlist.upsert({
-          status:"youtube",
-          youtubeId:ctx.request.body.playlistId
-        })
-      }else{
-        await Sale.upsert(ctx.request.body);
-        var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
-        var items = await youApi.getPlaylistItems(ctx.request.body.playlistId);
-            var videos = [];
-            for (var j in items.items) {
-                videos.push(items.items[j].snippet.resourceId.videoId);
-            }
-        videos = videos.join(",");
 
-        await Playlist.upsert({
-          status:"sale",
-          videos:videos,
-          youtubeId:ctx.request.body.playlistId
-        });
-      }
-      ctx.body="OK";
-    }catch(err){
-      console.log(err);
-      ctx.body="Err";
+  let id = ctx.request.body.id;
+  let price = ctx.request.body.price;
+
+  // MAIN CODE
+  try {
+    // CONSOLE
+    console.log("We get price ---- $" + price);
+    // CODE
+    // Insert a new row in table Sales
+    await Sale.create(
+      {playlistId: id, price: price}
+    );
+
+    // Selecting row in table Playlist by id
+    let playlist = await Playlist.findById(id);
+    console.log("Youtube playlist id - " + playlist.get('youtubeId'));
+    //YAPI connection
+    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+    var items = await youApi.getPlaylistItems(playlist.get('youtubeId'));
+
+    // Array for videos
+    var videos = [];
+    for (var j in items.items) {
+        videos.push(items.items[j].snippet.resourceId.videoId);
     }
-  });
+    videos = videos.join(",");
+
+    // Playlist status changing process and video id inserting
+    await Playlist.update(
+      {status:"sale", videos: videos},
+      {where: {id: id}}
+    );
+
+    // Massage
+    ctx.body="OK";
+  }
+  catch(err) {
+    // CONSOLE
+    console.log(err);
+    // ERROR
+    ctx.body="Err";
+  }
+});
+
+// ------------------------ //
+// Sale cancelation process //
+// ------------------------ //
+router.get('/cancelSale', koaBody, async (ctx) => {
+  // CONSOLES
+  console.log("////////////// Canceling playlist sale //////////////////");
+  console.log(ctx.request.body);
+
+  // MAIN CODE
+  try {
+    // Removing playlist from playlist SALE table
+    await Sale.destroy(
+      {where: {playlistId: ctx.request.body.id}}
+    );
+    // Playlist status change process
+    await Playlist.update(
+      {status: "youtube"},
+      {where: {id: ctx.request.body.id}}
+    );
+    // CODE - end
+  }
+  catch(err) {
+    // CONSOLE
+    console.log(err);
+    // ERROR
+    ctx.body="Err";
+  }
+});
+
 
 router.get('/logout', logout);
 

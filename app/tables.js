@@ -18,7 +18,7 @@ const Order = sq.define('orders', {
 
 const Sale = sq.define('sales', {
   id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  playlistId: {type: Sequelize.STRING(35), unique: true},
+  playlistId: {type: Sequelize.INTEGER, unique: true},
   price: Sequelize.FLOAT
 });
 
