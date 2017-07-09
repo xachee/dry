@@ -224,7 +224,23 @@
               <%}%>
             </div>
            </div>
+          <% } };%>
+          <% if(typeof boughtPlaylists !== "undefined"){ for(var i =0;i < boughtPlaylists.length;i++){ %>
+          
+          <div class="playlist_box">
+            <a href="/playlist-page/<%= boughtPlaylists[i].youtubeId %> " target="_blank">
+              <img src="<%= boughtPlaylists[i].thumbnail %>" alt="" class="playlist_img">
+              <p class="playlist_name" title="<%= boughtPlaylists[i].title%>"><%= boughtPlaylists[i].title%></p>
+            </a>
+            <div class="playlist_statusBox" playlist-id = "<%= boughtPlaylists[i].id %>">
+              <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
+                $<%= boughtPrices[i].price%>
+              </span>
+            </div>
+           </div>
+
           <% } } %>
+
         </div>
 
       </div>

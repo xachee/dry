@@ -31,13 +31,33 @@ async function playlist_l(ctx) {
       }else{
         var price=null;
       }
-      //var price=priceD.dataValues.price;
       prices.push({id:playlists[i].dataValues.youtubeId,price:price});
+    }
+    var bpls=[];
+    var ords=await Order.findAll({
+      where:{
+        ownerId:ctx.state.user.googleId
+      }
+    })
+
+    var bprices=[];
+    for(var i in ords){
+      var pl=await Playlist.findOne({
+        where:{
+          id:ords[i].dataValues.playlistId
+        }
+      })
+      bpls.push(pl.dataValues);
+      var priceD = await Sale.findOne({where:{playlistId: pl.dataValues.id}});
+      bprices.push({id:playlists[i].dataValues.youtubeId,price:priceD.dataValues.price});
+
     }
 
     await ctx.render('my_playlists/my_playlists', {
         playlists: pls,
-        prices:prices
+        prices:prices,
+        boughtPlaylists:bpls,
+        boughtPrices:bprices
     });
 }
 
@@ -131,7 +151,7 @@ router.get('/my-playlists', playlist_l);
 router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
 router.get('/store', store);
-router.get('/buy',koaBody,buy);
+router.post('/buy',koaBody,buy);
 
 router.get('/auth/google', passport.authenticate('google', {
     scope: config.google.scope,
