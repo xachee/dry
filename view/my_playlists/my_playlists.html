@@ -205,6 +205,30 @@
                   });
                 }
               });
+              $(document).on('click', '.red_warn', function(){
+                var box = $(this).parent();
+                id = $(box).attr("playlist-id");
+
+                $(box).find( ".red_warn").prop('disabled', true);
+                $(box.parent()).css({"opacity" : "0.5"});
+
+                $.post(
+                   "/deletePlaylist",//url
+                   {//data
+                       id: id
+                   },
+                  function(data,status){
+                    if(data !="OK"){
+                      value= typeof prices[p_id] !== "undefined" ? "$"+ prices[p_id] : 0;
+                      alert("Error: Try again");
+                    }
+                    $(box).empty();
+                    $(box.parent()).fadeOut(300, function() {
+                      $(box.parent()).remove();
+                    });
+                  }
+                 );
+              });
             });
           </script>
           <% if(typeof playlists !== "undefined"){ for(var i =0;i < playlists.length;i++){ %>
@@ -236,6 +260,7 @@
               <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
                 $<%= boughtPrices[i].price%>
               </span>
+              <button type="button" name="n" class="red_warn">End</button>
             </div>
            </div>
           <% } };%>

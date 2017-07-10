@@ -161,6 +161,22 @@ SELL
   border-radius: 10px;
   padding: 7px 20px;
 }
+.red_warn{
+  outline: none;
+  transition: all .5s;
+  background-color: #2196F3;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 25px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 30px;
+  border: none;
+  background-color: #f32151;
+}
+.red_warn:hover{
+  background-color: #d10030;
+}
 /*Placeholder*/
 .playlist_box .playlist_statusBox input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #2196F3;
