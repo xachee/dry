@@ -154,8 +154,18 @@ async function store(ctx) {
 }
 
 async function dashboard(ctx, next) {
+    var news=[];
+    var pls =await Playlist.findAll({
+      order:[['id','DESC']],
+      limit: 10
+    })
+    for(var i in pls){
+      news.push(pls[i].dataValues);
+    }
+    console.log(news);
     await ctx.render('main/index', {
-        user: ctx.state.user
+        user: ctx.state.user,
+        news:news
     });
     await next();
 }

@@ -56,15 +56,14 @@
              <div class="post-title">
                  <h1>News</h1>
              </div>
-             <p><b>Spotify</b> is a music, podcast, and video streaming service, officially launched on <b>7 October 2008</b>. It is developed by startup <b>Spotify</b> AB in Stockholm, Sweden. It provides digital rights management-protected content from record labels and media companies. Spotify is a freemium service, meaning that basic features are free with advertisements, while additional features, including improved streaming quality and offline music downloads, are offered via paid subscriptions.</p>
-
-             <div class="post-info">
-                 <span>July 3, 2017 / by <a href="https://www.spotify.com" target="_blank">Spotify</a></span>
+             <% for(var i in news){ %>
+             <div>
+                <a href="/playlist-page/<%= news[i].youtubeId %>">
+                    <img src="<%= news[i].thumbnail %>" alt="" class="playlist_img">
+                    <p class="playlist_name" title="<%= news[i].title%>"><%= news[i].title%></p>
+                 </a>
              </div>
-             <p>It provides advertising-free streaming of all videos hosted by <b>YouTube</b>, offline play and background playback of videos on mobile devices, access to advertising-free music streaming through Google Play Music, and access to <b>"YouTube Red Original"</b> series and films.</p>
-             <div class="post-info">
-                 <span>July 2, 2017 / by <a href="https://www.youtube.com/red" target="_blank">YouTube Red</a></span>
-             </div>
+             <%}%>
          </div>
 
      </div>
