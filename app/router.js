@@ -155,14 +155,33 @@ async function store(ctx) {
 
 async function dashboard(ctx, next) {
     var news=[];
+    var ords=await Order.findAll({
+      where:{
+        ownerId:ctx.state.user.googleId
+      }
+    })
+    var ordIds=[];
+    for(var i in ords){
+      ordIds.push(ords[i].dataValues.playlistId);
+    }
     var pls =await Playlist.findAll({
+      where: {
+            status: "sale",
+            userId:{
+              $not :ctx.state.user.googleId
+            },
+            id:{
+              $notIn:ordIds
+            }
+        },
       order:[['id','DESC']],
       limit: 10
     })
+
     for(var i in pls){
       news.push(pls[i].dataValues);
     }
-    console.log(news);
+
     await ctx.render('main/index', {
         user: ctx.state.user,
         news:news
