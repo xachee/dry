@@ -39,6 +39,11 @@ async function main(ctx) {
 
     for(var i in pls){
       news.push(pls[i].dataValues);
+      news[i].price=(await Sale.findOne({
+        where:{
+          playlistId:pls[i].dataValues.id
+        }
+      })).dataValues.price;
     }
     await ctx.render('main/index',{
       news:news
@@ -214,8 +219,12 @@ async function dashboard(ctx, next) {
 
     for(var i in pls){
       news.push(pls[i].dataValues);
+      news[i].price=(await Sale.findOne({
+        where:{
+          playlistId:pls[i].dataValues.id
+        }
+      })).dataValues.price;
     }
-
     await ctx.render('main/index', {
         user: ctx.state.user,
         news:news

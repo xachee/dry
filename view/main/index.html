@@ -62,10 +62,9 @@
                     <img src="<%= news[i].thumbnail %>" alt="" class="playlist_img">
                     <p class="playlist_name" title="<%= news[i].title%>"><%= news[i].title%></p>
                  </a>
-                 <div class="playlist_statusBox" playlist-id = "<%= playlists[i].id %>">
-                   <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;" playlist-price="<%= prices[i].price%>"><img src="img/pencil-edit-button.png" alt="Edit"></button>
+                 <div class="playlist_statusBox" >
                    <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
-                     $<%= prices[i].price%>
+                     $<%= news[i].price%>
                    </span>
                  </div>
              </div>
