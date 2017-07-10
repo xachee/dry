@@ -289,7 +289,7 @@ async function inter(ctx){
 }
 
 async function profile(ctx){
-
+  await ctx.render('profile/index',{user: ctx.state.user});
 }
 
 router.get('/profile',profile);
