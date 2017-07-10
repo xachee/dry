@@ -17,7 +17,7 @@ async function main(ctx) {
           ownerId:ctx.state.user.googleId
         }
       })
-      
+
       for(var i in ords){
         ordIds.push(ords[i].dataValues.playlistId);
       }
@@ -131,7 +131,7 @@ async function playlist_p(ctx) {
   }else{
     var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
     var items = (await youApi.getPlaylistItems(ctx.params.id)).items;
-    
+
   }
   var infs=await Sale.findOne({
       where:{
@@ -270,7 +270,7 @@ async function buy(ctx){
       copyId:newId
     })
 
-    
+
 
     ctx.body="OK";
   }catch(err){
@@ -292,11 +292,11 @@ async function inter(ctx){
   }
 }
 
-async function profile(ctx){
-  await ctx.render('profile/index',{user: ctx.state.user});
+async function payment_settings(ctx){
+  await ctx.render('payment/index',{user: ctx.state.user});
 }
 
-router.get('/payment_settings',profile);
+router.get('/payment_settings',payment_settings);
 router.get('/main', main);
 router.get('/', main);
 router.get('/my-playlists', playlist_l);
