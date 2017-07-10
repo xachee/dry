@@ -97,19 +97,15 @@ async function playlist_l(ctx) {
 }
 
 async function playlist_p(ctx) {
-  var videos = await Playlist.findOne({
-    where:{
-      youtubeId:ctx.params.id
-    }
-  });
   var info = await Playlist.findOne({
         where: {
             youtubeId: ctx.params.id
         }
     });
-  if(videos){
+
+  if(info.dataValues.videos != ''){
     var items=[];
-    var vid=videos.dataValues.videos.split(",");
+    var vid=info.dataValues.videos.split(",");
     for(var i in vid){
       var v=await Video.findOne({
         where:{
@@ -137,7 +133,15 @@ async function playlist_p(ctx) {
     var items = (await youApi.getPlaylistItems(ctx.params.id)).items;
     
   }
+  var infs=await Sale.findOne({
+      where:{
+        playlistId:info.id
+      }
+    });
 
+    if(infs){
+      info.price=infs.dataValues.price
+    }
     await ctx.render('playlist-page/index', {
         info: info,
         items: items
@@ -292,7 +296,7 @@ async function profile(ctx){
   await ctx.render('profile/index',{user: ctx.state.user});
 }
 
-router.get('/profile',profile);
+router.get('/payment_settings',profile);
 router.get('/main', main);
 router.get('/', main);
 router.get('/my-playlists', playlist_l);
