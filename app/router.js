@@ -8,7 +8,41 @@ const {User, Order, Sale, Playlist,Copy,Video} = require("./tables");
 const koaBody = require('koa-body')();
 
 async function main(ctx) {
-    await ctx.render('main/index');
+  var news=[];
+  var ordIds=[];
+  var gid=null;
+    if(ctx.isAuthenticated()){
+      var ords=await Order.findAll({
+        where:{
+          ownerId:ctx.state.user.googleId
+        }
+      })
+      
+      for(var i in ords){
+        ordIds.push(ords[i].dataValues.playlistId);
+      }
+      gid=ctx.state.user.googleId;
+    }
+    var pls =await Playlist.findAll({
+      where: {
+            status: "sale",
+            userId:{
+              $not :gid
+            },
+            id:{
+              $notIn:ordIds
+            }
+        },
+      order:[['id','DESC']],
+      limit: 10
+    })
+
+    for(var i in pls){
+      news.push(pls[i].dataValues);
+    }
+    await ctx.render('main/index',{
+      news:news
+    });
 }
 
 async function create(ctx) {

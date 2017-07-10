@@ -7,7 +7,8 @@ const User = sq.define('users', {
   accessToken: Sequelize.TEXT,
   refreshToken: Sequelize.TEXT,
   photos: Sequelize.TEXT,
-  displayName: Sequelize.TEXT
+  displayName: Sequelize.TEXT,
+  interledger: Sequelize.TEXT
 });
 
 const Order = sq.define('orders', {
