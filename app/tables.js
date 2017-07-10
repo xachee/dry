@@ -36,7 +36,8 @@ const Playlist = sq.define('playlists', {
 const Copy = sq.define('copies', {
   id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   baseId: Sequelize.TEXT,
-  copyId: Sequelize.TEXT
+  copyId: Sequelize.TEXT,
+  status: {type: Sequelize.STRING(7), defaultValue: "active"}
 });
 
 const Video = sq.define('videos', {
