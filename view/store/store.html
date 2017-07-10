@@ -33,6 +33,8 @@
               $(document).on('click', '.click-buy', function(){
                 var box = $(this).parent();
                 p_id = $(box).attr("playlist-id");
+                $(box).find(".click-buy").prop('disabled', true);
+                $(box.parent()).css({"opacity" : "0.5"});
                 $.post(
                    "/buy",//url
                    {//data
@@ -44,7 +46,9 @@
                       // value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
                       alert("Error: Try again");
                      }
-                     $(box.parent()).remove();
+                     $(box.parent()).fadeOut(300, function() {  
+                       $(box.parent()).remove();
+                     });
                   }
                  );
               });
