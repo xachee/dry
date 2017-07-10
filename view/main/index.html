@@ -56,6 +56,9 @@
              <div class="post-title">
                  <h1>News</h1>
              </div>
+             <% if(news.length == 0){ %>
+               <h1 class="nts_text">Nothing To Show</h1>
+             <% } %>
              <% for(var i in news){ %>
              <div class="playlist_box">
                 <a href="/playlist-page/<%= news[i].youtubeId %>">
