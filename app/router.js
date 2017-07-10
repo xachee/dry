@@ -50,10 +50,6 @@ async function main(ctx) {
     });
 }
 
-async function create(ctx) {
-    await ctx.render('create_playlist_to_sell/create_playlist_to_sell');
-}
-
 async function playlist_l(ctx) {
     var playlists = await Playlist.findAll({
         where: {
@@ -279,7 +275,24 @@ async function buy(ctx){
   }
 }
 
-router.get('/create', create);
+async function inter(ctx){
+  try{
+    await User.upsert({
+      googleId:ctx.state.user.googleId,
+      interledger:ctx.request.body.int
+    })
+    ctx.body="OK";
+  }catch(err){
+    console.log(err);
+    ctx.body="err";
+  }
+}
+
+async function profile(ctx){
+
+}
+
+router.get('/profile',profile);
 router.get('/main', main);
 router.get('/', main);
 router.get('/my-playlists', playlist_l);
@@ -287,6 +300,7 @@ router.get('/playlist-page/:id', playlist_p);
 router.get('/payment', payment);
 router.get('/store', store);
 router.post('/buy',koaBody,buy);
+router.post('/inter',koaBody,inter);
 
 router.get('/auth/google', passport.authenticate('google', {
     scope: config.google.scope,
