@@ -81,6 +81,21 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
     });
   }
 
+  this.deletePlaylist=function deletePlaylist(id){
+      return new Promise(function (res,rej) {
+        that.youtube.playlists.delete({
+          id:id
+        },function (err,result) {
+          if (err) {
+           rej();
+          }
+          else{
+            res();
+          }
+        });
+      });
+    }
+
   this.insertVideo=function insertVideo(obj){
     return new Promise(function (res,rej) {
       that.youtube.playlistItems.insert({

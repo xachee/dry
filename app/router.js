@@ -267,7 +267,8 @@ async function buy(ctx){
 
     await Copy.create({
       baseId:playlist.id,
-      copyId:newId
+      copyId:newId,
+      ownerId:ctx.state.user.googleId
     })
 
 
@@ -296,6 +297,40 @@ async function payment_settings(ctx){
   await ctx.render('payment/index',{user: ctx.state.user});
 }
 
+async function deletePlaylist(ctx){
+  try{
+    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+    
+    
+    var inf = await Copy.findOne({
+       where:{
+        baseId:ctx.request.body.id,
+        ownerId:ctx.state.user.googleId
+      }
+    });
+
+    await Order.destroy({
+      where:{
+        ownerId:ctx.state.user.googleId,
+        playlistId:ctx.request.body.id
+      }
+    })
+
+    await Copy.destroy({
+      where:{
+        baseId:ctx.request.body.id,
+        ownerId:ctx.state.user.googleId
+      }
+    });
+
+    await youApi.deletePlaylist(inf.dataValues.copyId);
+    ctx.body="OK";
+  }catch(err){
+    console.log(err);
+    ctx.body="err";
+  }
+}
+
 router.get('/payment_settings',payment_settings);
 router.get('/main', main);
 router.get('/', main);
@@ -305,7 +340,7 @@ router.get('/payment', payment);
 router.get('/store', store);
 router.post('/buy',koaBody,buy);
 router.post('/inter',koaBody,inter);
-
+router.post('/deletePlaylist',koaBody,deletePlaylist);
 router.get('/auth/google', passport.authenticate('google', {
     scope: config.google.scope,
     accessType: config.google.accessType,
