@@ -31,7 +31,6 @@ passport.use(new Strategy(strategyConfig,
                 googleId: profile.id
             }
         })).dataValues;
-
         var youApi = new YAPI(config, userGet.accessToken, userGet.refreshToken);
         var data = await youApi.getPlaylistData();
 

@@ -18,9 +18,10 @@ async function main(ctx) {
           ownerId:ctx.state.user.googleId
         }
       })
-
-      for(var i in ords){
-        ordIds.push(ords[i].dataValues.playlistId);
+      if(ords.length>0){
+        for(var i in ords){
+          ordIds.push(ords[i].dataValues.playlistId);
+        }
       }
       gid=ctx.state.user.googleId;
     }
@@ -38,13 +39,15 @@ async function main(ctx) {
       limit: 10
     })
 
-    for(var i in pls){
-      news.push(pls[i].dataValues);
-      news[i].price=(await Sale.findOne({
-        where:{
-          playlistId:pls[i].dataValues.id
-        }
-      })).dataValues.price;
+    if(pls.length>0){
+      for(var i in pls){
+        news.push(pls[i].dataValues);
+        news[i].price=(await Sale.findOne({
+          where:{
+            playlistId:pls[i].dataValues.id
+          }
+        })).dataValues.price;
+      }
     }
     await ctx.render('main/index',{
       news:news
@@ -195,20 +198,26 @@ async function store(ctx) {
 
 async function dashboard(ctx, next) {
     var news=[];
-    var ords=await Order.findAll({
-      where:{
-        ownerId:ctx.state.user.googleId
+  var ordIds=[];
+  var gid=null;
+    if(ctx.isAuthenticated()){
+      var ords=await Order.findAll({
+        where:{
+          ownerId:ctx.state.user.googleId
+        }
+      })
+      if(ords.length>0){
+        for(var i in ords){
+          ordIds.push(ords[i].dataValues.playlistId);
+        }
       }
-    })
-    var ordIds=[];
-    for(var i in ords){
-      ordIds.push(ords[i].dataValues.playlistId);
+      gid=ctx.state.user.googleId;
     }
     var pls =await Playlist.findAll({
       where: {
             status: "sale",
             userId:{
-              $not :ctx.state.user.googleId
+              $not :gid
             },
             id:{
               $notIn:ordIds
@@ -218,13 +227,15 @@ async function dashboard(ctx, next) {
       limit: 10
     })
 
-    for(var i in pls){
-      news.push(pls[i].dataValues);
-      news[i].price=(await Sale.findOne({
-        where:{
-          playlistId:pls[i].dataValues.id
-        }
-      })).dataValues.price;
+    if(pls.length>0){
+      for(var i in pls){
+        news.push(pls[i].dataValues);
+        news[i].price=(await Sale.findOne({
+          where:{
+            playlistId:pls[i].dataValues.id
+          }
+        })).dataValues.price;
+      }
     }
     await ctx.render('main/index', {
         user: ctx.state.user,
