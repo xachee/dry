@@ -6,6 +6,7 @@ const passport = require('koa-passport');
 const YAPI = require('./youtube');
 const {User, Order, Sale, Playlist,Copy,Video} = require("./tables");
 const koaBody = require('koa-body')();
+const send = require('./payment');
 
 async function main(ctx) {
   var news=[];
@@ -239,17 +240,42 @@ async function logout(ctx) {
 
 async function buy(ctx){
   try{
-    await Order.create({
-      playlistId:ctx.request.body.id,
-      ownerId:ctx.state.user.googleId
-    })
-    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+    var interPassword=(await User.findOne({
+      where:{
+        googleId:ctx.state.user.googleId
+      },
+      attributes:['interPassword']
+    })).dataValues.interPassword;
+
+    var amount = (await Sale.findOne({
+      where:{
+        playlistId:ctx.request.body.id
+      }
+    })).dataValues.price;
 
     var playlist=(await Playlist.findOne({
       where:{
         id:ctx.request.body.id
       }
     })).dataValues;
+
+    var receiver=(await User.findOne({
+      where:{
+        googleId:playlist.userId
+      },
+      attributes:['interledger']
+    })).dataValues.interledger;
+
+    await send(ctx.state.user.interledger,interPassword,amount,receiver,"Payment for Playlist: "+playlist.youtubeId);
+
+    await Order.create({
+      playlistId:ctx.request.body.id,
+      ownerId:ctx.state.user.googleId
+    })
+    
+    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+
+    
 
     var newId = await youApi.insertPlaylist({
       title:playlist.title,
@@ -274,7 +300,7 @@ async function buy(ctx){
 
 
     ctx.body="OK";
-  }catch(err){
+  } catch(err) {
     console.log(err);
     ctx.body="err";
   }
@@ -284,7 +310,8 @@ async function inter(ctx){
   try{
     await User.upsert({
       googleId:ctx.state.user.googleId,
-      interledger:ctx.request.body.int
+      interledger:ctx.request.body.int,
+      interPassword:ctx.request.body.intp
     })
     ctx.body="OK";
   }catch(err){

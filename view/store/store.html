@@ -45,10 +45,13 @@
                     if(data != 'OK'){
                       // value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
                       alert("Error: Try again");
-                     }
+                      $(box.parent()).css({"opacity" : "1"});
+                      $(box).find(".click-buy").prop('disabled', false);
+                     }else{
                      $(box.parent()).fadeOut(300, function() {  
                        $(box.parent()).remove();
-                     });
+                        });
+                     }
                   }
                  );
               });

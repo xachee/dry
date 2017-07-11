@@ -172,7 +172,7 @@
                     var username = $("#username").val();
                     var password = $("#password").val();
                     $.post(
-                       "/sell",//url
+                       "/inter",//url
                        {//data
                            int: username,
                            intp: password
@@ -200,12 +200,12 @@
         			<ul>
         				<li>
         					<label for="name">Interledger Username</label>
-        					<input type="text" name="name" maxlength="100" id="username">
+        					<input type="text" name="name" maxlength="100" id="username" placeholder="<%=user.interledger%>">
         					<span>Enter your interledger Username here</span>
         				</li>
         				<li>
         					<label for="url">Interledger password</label>
-        					<input type="password" name="url" id="password">
+        					<input type="password" name="url" id="password" placeholder="********">
         					<span>Enter your interledger Password here</span>
         				</li>
         				<li>
