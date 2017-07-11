@@ -12,6 +12,8 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "googleapis": "^19.0.0",
+    "ilp": "^11.2.0",
+    "ilp-plugin-bells": "^14.2.1",
     "install": "^0.10.1",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
