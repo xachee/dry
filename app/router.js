@@ -9,147 +9,155 @@ const koaBody = require('koa-body')();
 const send = require('./payment');
 
 async function main(ctx) {
-  var news=[];
-  var ordIds=[];
-  var gid=null;
-    if(ctx.isAuthenticated()){
+    var news=[];
+    var ordIds=[];
+    var gid=null;
+      if(ctx.isAuthenticated()){
+        var ords=await Order.findAll({
+          where:{
+            ownerId:ctx.state.user.googleId
+          }
+        })
+        if(ords.length>0){
+          for(var i in ords){
+            ordIds.push(ords[i].dataValues.playlistId);
+          }
+        }
+        gid=ctx.state.user.googleId;
+      }
+      var pls =await Playlist.findAll({
+        where: {
+              status: "sale",
+              userId:{
+                $not :gid
+              },
+              id:{
+                $notIn:ordIds
+              }
+          },
+        order:[['id','DESC']],
+        limit: 10
+      })
+
+      if(pls.length>0){
+        for(var i in pls){
+          news.push(pls[i].dataValues);
+          news[i].price=(await Sale.findOne({
+            where:{
+              playlistId:pls[i].dataValues.id
+            }
+          })).dataValues.price;
+        }
+      }
+      await ctx.render('main/index',{
+        news:news
+      });
+}
+
+async function playlist_l(ctx) {
+  if(ctx.isAuthenticated()){
+      var playlists = await Playlist.findAll({
+          where: {
+              userId: ctx.state.user.googleId
+          }
+      });
+      var pls=[];
+      var prices=[];
+      for(var i in playlists){
+        pls.push(playlists[i].dataValues);
+        var priceD = await Sale.findOne({where:{playlistId: playlists[i].dataValues.id}});
+        if(priceD!= null){
+          var price=priceD.dataValues.price;
+        }else{
+          var price=null;
+        }
+        prices.push({id:playlists[i].dataValues.youtubeId,price:price});
+      }
+      var bpls=[];
       var ords=await Order.findAll({
         where:{
           ownerId:ctx.state.user.googleId
         }
       })
-      if(ords.length>0){
-        for(var i in ords){
-          ordIds.push(ords[i].dataValues.playlistId);
-        }
-      }
-      gid=ctx.state.user.googleId;
-    }
-    var pls =await Playlist.findAll({
-      where: {
-            status: "sale",
-            userId:{
-              $not :gid
-            },
-            id:{
-              $notIn:ordIds
-            }
-        },
-      order:[['id','DESC']],
-      limit: 10
-    })
 
-    if(pls.length>0){
-      for(var i in pls){
-        news.push(pls[i].dataValues);
-        news[i].price=(await Sale.findOne({
+      var bprices=[];
+      for(var i in ords){
+        var pl=await Playlist.findOne({
           where:{
-            playlistId:pls[i].dataValues.id
+            id:ords[i].dataValues.playlistId
           }
-        })).dataValues.price;
+        })
+        bpls.push(pl.dataValues);
+        var priceD = await Sale.findOne({where:{playlistId: pl.dataValues.id}});
+        bprices.push({id:playlists[i].dataValues.youtubeId,price:priceD.dataValues.price});
+
       }
-    }
-    await ctx.render('main/index',{
-      news:news
-    });
-}
 
-async function playlist_l(ctx) {
-    var playlists = await Playlist.findAll({
-        where: {
-            userId: ctx.state.user.googleId
-        }
-    });
-    var pls=[];
-    var prices=[];
-    for(var i in playlists){
-      pls.push(playlists[i].dataValues);
-      var priceD = await Sale.findOne({where:{playlistId: playlists[i].dataValues.id}});
-      if(priceD!= null){
-        var price=priceD.dataValues.price;
-      }else{
-        var price=null;
-      }
-      prices.push({id:playlists[i].dataValues.youtubeId,price:price});
-    }
-    var bpls=[];
-    var ords=await Order.findAll({
-      where:{
-        ownerId:ctx.state.user.googleId
-      }
-    })
-
-    var bprices=[];
-    for(var i in ords){
-      var pl=await Playlist.findOne({
-        where:{
-          id:ords[i].dataValues.playlistId
-        }
-      })
-      bpls.push(pl.dataValues);
-      var priceD = await Sale.findOne({where:{playlistId: pl.dataValues.id}});
-      bprices.push({id:playlists[i].dataValues.youtubeId,price:priceD.dataValues.price});
-
-    }
-
-    await ctx.render('my_playlists/my_playlists', {
-        playlists: pls,
-        prices:prices,
-        boughtPlaylists:bpls,
-        boughtPrices:bprices
-    });
+      await ctx.render('my_playlists/my_playlists', {
+          playlists: pls,
+          prices:prices,
+          boughtPlaylists:bpls,
+          boughtPrices:bprices
+      });
+     }else{
+    ctx.redirect('/main');
+  }
 }
 
 async function playlist_p(ctx) {
-  var info = await Playlist.findOne({
-        where: {
-            youtubeId: ctx.params.id
-        }
-    });
-
-  if(info.dataValues.videos != ''){
-    var items=[];
-    var vid=info.dataValues.videos.split(",");
-    for(var i in vid){
-      var v=await Video.findOne({
-        where:{
-          videoId:vid[i]
-        }
+  if(ctx.isAuthenticated()){
+    var info = await Playlist.findOne({
+          where: {
+              youtubeId: ctx.params.id
+          }
       });
-      var title=v.dataValues.title;
-      var thumb=v.dataValues.thumbnail;
-      items.push({
-        snippet:{
-          title:title,
-          thumbnails:{
-            default:{
-              url:thumb
-            }
-          },
-          resourceId:{
+
+    if(info.dataValues.videos != ''){
+      var items=[];
+      var vid=info.dataValues.videos.split(",");
+      for(var i in vid){
+        var v=await Video.findOne({
+          where:{
             videoId:vid[i]
           }
-        }
-      })
-    }
-  }else{
-    var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
-    var items = (await youApi.getPlaylistItems(ctx.params.id)).items;
-
-  }
-  var infs=await Sale.findOne({
-      where:{
-        playlistId:info.id
+        });
+        var title=v.dataValues.title;
+        var thumb=v.dataValues.thumbnail;
+        items.push({
+          snippet:{
+            title:title,
+            thumbnails:{
+              default:{
+                url:thumb
+              }
+            },
+            resourceId:{
+              videoId:vid[i]
+            }
+          }
+        })
       }
-    });
+    }else{
+      var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
+      var items = (await youApi.getPlaylistItems(ctx.params.id)).items;
 
-    if(infs){
-      info.price=infs.dataValues.price
     }
-    await ctx.render('playlist-page/index', {
-        info: info,
-        items: items
-    });
+    var infs=await Sale.findOne({
+        where:{
+          playlistId:info.id
+        }
+      });
+
+      if(infs){
+        info.price=infs.dataValues.price
+      }
+      await ctx.render('playlist-page/index', {
+          info: info,
+          items: items
+      });
+    }else{
+    ctx.redirect('/');
+  }
 }
 
 async function payment(ctx) {
@@ -157,43 +165,47 @@ async function payment(ctx) {
 }
 
 async function store(ctx) {
-    var ords=await Order.findAll({
-      where:{
-        ownerId:ctx.state.user.googleId
-      }
-    })
-    var ordIds=[];
-    for(var i in ords){
-      ordIds.push(ords[i].dataValues.playlistId);
-    }
-    var playlists = await Playlist.findAll({
-        where: {
-            status: "sale",
-            userId:{
-              $not :ctx.state.user.googleId
-            },
-            id:{
-              $notIn:ordIds
-            }
-        }
-    });
-
-    var pls =[];
-    var prs=[];
-    for(var i in playlists){
-      pls.push(playlists[i].dataValues);
-      var price=(await Sale.findOne({
+  if(ctx.isAuthenticated()){
+      var ords=await Order.findAll({
         where:{
-          playlistId:playlists[i].dataValues.id
+          ownerId:ctx.state.user.googleId
         }
-      })).dataValues.price;
-      prs.push({price:price});
-    }
+      })
+      var ordIds=[];
+      for(var i in ords){
+        ordIds.push(ords[i].dataValues.playlistId);
+      }
+      var playlists = await Playlist.findAll({
+          where: {
+              status: "sale",
+              userId:{
+                $not :ctx.state.user.googleId
+              },
+              id:{
+                $notIn:ordIds
+              }
+          }
+      });
 
-    await ctx.render('store/store',{
-      playlists:pls,
-      prices:prs
-    });
+      var pls =[];
+      var prs=[];
+      for(var i in playlists){
+        pls.push(playlists[i].dataValues);
+        var price=(await Sale.findOne({
+          where:{
+            playlistId:playlists[i].dataValues.id
+          }
+        })).dataValues.price;
+        prs.push({price:price});
+      }
+
+      await ctx.render('store/store',{
+        playlists:pls,
+        prices:prs
+      });
+    }else{
+    ctx.redirect('/');
+  }
 }
 
 async function dashboard(ctx, next) {
@@ -277,6 +289,11 @@ async function buy(ctx){
       attributes:['interledger']
     })).dataValues.interledger;
 
+    if(ctx.state.user.interledger == '' || ctx.state.user.interledger ==null || interPassword=='' || interPassword==null){
+        ctx.body="Inter";
+      return 0;
+    }
+
     await send(ctx.state.user.interledger,interPassword,amount,receiver,"Payment for Playlist: "+playlist.youtubeId);
 
     await Order.create({
@@ -332,7 +349,11 @@ async function inter(ctx){
 }
 
 async function payment_settings(ctx){
-  await ctx.render('payment/index',{user: ctx.state.user});
+  if(ctx.isAuthenticated()){
+    await ctx.render('payment/index',{user: ctx.state.user});
+  }else{
+    ctx.redirect('/');
+  }
 }
 
 async function deletePlaylist(ctx){
