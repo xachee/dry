@@ -71,11 +71,11 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
           } 
         }
       },function (err,result) {
-        if (result) {
-         res(result.id);
+        if (err) {
+            rej();
         }
         else{
-          rej();
+          res(result.id);
         }
       });
     });
