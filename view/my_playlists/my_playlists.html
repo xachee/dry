@@ -99,7 +99,7 @@
                            $(box).empty();
                              $(box).css({"opacity" : "1"});
                              box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
-                             box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                             box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "/month</span>");
                              sell_click = true;
                              sell_click_edit = true;
                         }
@@ -187,7 +187,7 @@
                           $(box).empty();
                             $(box).css({"opacity" : "1"});
                             box.append('<button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;"><img src="img/pencil-edit-button.png" alt="Edit"></button>');
-                            box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "</span>");
+                            box.append("<span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>" + value + "/month</span>");
                             sell_click = true;
                             sell_click_edit = true;
                         }
@@ -243,7 +243,7 @@
               <%}else{%>
               <button type="button" name="edit" class="playlist_price_edit" style="margin-right: 5px;" playlist-price="<%= prices[i].price%>"><img src="img/pencil-edit-button.png" alt="Edit"></button>
               <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
-                $<%= prices[i].price%>
+                $<%= prices[i].price%>/month
               </span>
               <%}%>
             </div>
@@ -258,7 +258,7 @@
             </a>
             <div class="playlist_statusBox" playlist-id = "<%= boughtPlaylists[i].id %>">
               <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
-                $<%= boughtPrices[i].price%>
+                $<%= boughtPrices[i].price%>/month
               </span>
               <button type="button" name="n" class="red_warn">End</button>
             </div>
