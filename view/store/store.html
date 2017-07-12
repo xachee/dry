@@ -48,7 +48,7 @@
                       $(box.parent()).css({"opacity" : "1"});
                       $(box).find(".click-buy").prop('disabled', false);
                      }else{
-                     $(box.parent()).fadeOut(300, function() {  
+                     $(box.parent()).fadeOut(300, function() {
                        $(box.parent()).remove();
                         });
                      }
@@ -65,7 +65,7 @@
             </a>
             <div class="playlist_statusBox" playlist-id = "<%= playlists[i].id %>">
               <span style='color: #2196f3;font-size: 37px;margin-right: 5px;vertical-align: bottom;'>
-                $<%= prices[i].price%>
+                $<%= prices[i].price%>/month
               </span>
               <button type="button" name="button" class="click-buy">Buy</button>
             </div>
