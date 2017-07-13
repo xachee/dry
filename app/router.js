@@ -307,11 +307,15 @@ async function buy(ctx) {
       }
 
       await send(ctx.state.user.interledger, interPassword, amount, receiver, "Payment for Playlist: " + playlist.youtubeId);
+      console.log("Payment sent");
 
       await Order.create({
         playlistId: ctx.request.body.id,
         ownerId: ctx.state.user.id
       })
+      console.log("Order created for user : "+ ctx.state.user.id);
+
+
 
       var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
 
@@ -320,21 +324,24 @@ async function buy(ctx) {
         description: playlist.description
       });
 
-      var videos = playlist.videos.split(",");
-
-      for (var i in videos) {
-        await youApi.insertVideo({
-          pid: newId,
-          ptitle: playlist.title,
-          vid: videos[i]
-        })
-      }
-
       await Copy.create({
         baseId: playlist.id,
         copyId: newId,
         ownerId: ctx.state.user.id
       });
+
+      console.log("Copy added into Database "+ newId);
+
+      var videos = playlist.videos.split(",");
+
+      for (var i in videos) {
+          await youApi.insertVideo({
+            pid: newId,
+            ptitle: playlist.title,
+            vid: videos[i]
+          })
+      }
+
 
       ctx.body = "OK";
     }
@@ -383,19 +390,23 @@ async function deletePlaylist(ctx) {
         ownerId: ctx.state.user.id,
         playlistId: ctx.request.body.id
       }
-    })
-
-    await Copy.destroy({
-      where: {
-        baseId: ctx.request.body.id,
-        ownerId: ctx.state.user.id
-      }
     });
+    console.log("Order destroied for user : " + ctx.state.user.id);
+    
+    if(inf.dataValues.copyId != null){
+      await Copy.destroy({
+        where: {
+          baseId: ctx.request.body.id,
+          ownerId: ctx.state.user.id
+        }
+      });
+      console.log("Copy destroied " + inf.dataValues.copyId);
 
-    await youApi.deletePlaylist(inf.dataValues.copyId);
+      await youApi.deletePlaylist(inf.dataValues.copyId);
+    }
     ctx.body = "OK";
   } catch (err) {
-    console.log("On line 389: " + err);
+    console.log("On line 404: " + err);
     ctx.body = "err";
   }
 }

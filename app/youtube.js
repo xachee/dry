@@ -75,6 +75,7 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
             rej();
         }
         else{
+          console.log("Playlist inserted " + result.id);
           res(result.id);
         }
       });
@@ -91,6 +92,7 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
           }
           else{
             res();
+            console.log("Playlist deleted "  + id)
           }
         });
       });
@@ -111,11 +113,12 @@ var YoutubeAPI = function YoutubeAPI(config,accessT,refreshT)
           },
         }
       },function (err,result) {
-        if (result) {
-         res();
+        if (err) {
+         rej();
         }
         else{
-          rej();
+          console.log("Video inserted " + obj.vid);
+          res();
         }
       });
     });
