@@ -56,4 +56,4 @@ Order.sync();
 Copy.sync();
 Video.sync();
 
-module.exports = {User, Order, Sale, Playlist,Copy,Video};
+module.exports = {User, Order, Sale, Playlist, Copy, Video};

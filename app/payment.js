@@ -1,26 +1,30 @@
 'use strict'
+
 const SPSP = require('ilp').SPSP;
 const FiveBellsLedgerPlugin = require('ilp-plugin-bells');
 
-async function send(username,password,amount,receiver,message = ""){
+async function send(sender, senderPass, amount, receiver, message = ""){
 	const plugin = new FiveBellsLedgerPlugin({
-	  account: 'https://ilp.tumo.org/ledger/accounts/'+username,
-	  password: password
+	  account: 'https://ilp.tumo.org/ledger/accounts/' + sender,
+	  password: senderPass
 	})
 
+	await plugin.connect();
+	console.log('connected');
 
-		await plugin.connect();
-		console.log('connected');
+	var quote = await SPSP.quote(plugin, {
+    	receiver: receiver + '@ilp.tumo.org',
+    	sourceAmount: amount
+ 	});
 
-		var quote = await SPSP.quote(plugin, {
-	    receiver: receiver+'@ilp.tumo.org',
-	    sourceAmount: amount
-	 	 });
-		console.log("Ready");
+ 	quote.headers = {
+ 		'Source-Identifier': sender + '@ilp.tumo.org',
+ 		'Message': message
+ 	}
 
-		quote.memo = { message: message };
+	console.log("Payment quote is ready");
 
-		return SPSP.sendPayment(plugin, quote);
+	return SPSP.sendPayment(plugin, quote);
 }
 
 module.exports=send;

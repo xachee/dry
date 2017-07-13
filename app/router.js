@@ -15,7 +15,7 @@ async function main(ctx) {
   if (ctx.isAuthenticated()) {
     var ords = await Order.findAll({
       where: {
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     })
     if (ords.length > 0) {
@@ -25,6 +25,7 @@ async function main(ctx) {
     }
     gid = ctx.state.user.googleId;
   }
+
   var pls = await Playlist.findAll({
     where: {
       status: "sale",
@@ -49,6 +50,7 @@ async function main(ctx) {
       })).dataValues.price;
     }
   }
+
   await ctx.render('main/index', {
     news: news
   });
@@ -59,7 +61,8 @@ async function playlist_l(ctx) {
     var playlists = await Playlist.findAll({
       where: {
         userId: ctx.state.user.googleId
-      }
+      },
+      order: [['status']]
     });
     var pls = [];
     var prices = [];
@@ -76,7 +79,7 @@ async function playlist_l(ctx) {
     var bpls = [];
     var ords = await Order.findAll({
       where: {
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     })
 
@@ -160,15 +163,12 @@ async function playlist_p(ctx) {
   }
 }
 
-async function payment(ctx) {
-  await ctx.render('paymentPage/Payment');
-}
 
 async function store(ctx) {
   if (ctx.isAuthenticated()) {
     var ords = await Order.findAll({
       where: {
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     })
     var ordIds = [];
@@ -209,50 +209,54 @@ async function store(ctx) {
 }
 
 async function dashboard(ctx, next) {
-  var news = [];
-  var ordIds = [];
-  var gid = null;
-  if (ctx.isAuthenticated()) {
-    var ords = await Order.findAll({
-      where: {
-        ownerId: ctx.state.user.googleId
-      }
-    })
-    if (ords.length > 0) {
-      for (var i in ords) {
-        ordIds.push(ords[i].dataValues.playlistId);
-      }
-    }
-    gid = ctx.state.user.googleId;
-  }
-  var pls = await Playlist.findAll({
-    where: {
-      status: "sale",
-      userId: {
-        $not: gid
-      },
-      id: {
-        $notIn: ordIds
-      }
-    },
-    order: [['id', 'DESC']],
-    limit: 10
-  })
-
-  if (pls.length > 0) {
-    for (var i in pls) {
-      news.push(pls[i].dataValues);
-      news[i].price = (await Sale.findOne({
+  if(ctx.isAuthenticated()) {
+    var news = [];
+    var ordIds = [];
+    var gid = null;
+    if (ctx.isAuthenticated()) {
+      var ords = await Order.findAll({
         where: {
-          playlistId: pls[i].dataValues.id
+          ownerId: ctx.state.user.googleId
         }
-      })).dataValues.price;
+      })
+      if (ords.length > 0) {
+        for (var i in ords) {
+          ordIds.push(ords[i].dataValues.playlistId);
+        }
+      }
+      gid = ctx.state.user.googleId;
     }
+    var pls = await Playlist.findAll({
+      where: {
+        status: "sale",
+        userId: {
+          $not: gid
+        },
+        id: {
+          $notIn: ordIds
+        }
+      },
+      order: [['id', 'DESC']],
+      limit: 10
+    })
+
+    if (pls.length > 0) {
+      for (var i in pls) {
+        news.push(pls[i].dataValues);
+        news[i].price = (await Sale.findOne({
+          where: {
+            playlistId: pls[i].dataValues.id
+          }
+        })).dataValues.price;
+      }
+    }
+    await ctx.render('main/index', {
+      user: ctx.state.user,
+      news: news
+    });
+  }else{
+    ctx.redirect("/");
   }
-  await ctx.render('main/index', {
-    user: ctx.state.user,
-    news: news
-  });
 }
 
 async function logout(ctx) {
@@ -266,7 +270,7 @@ async function buy(ctx) {
     var exist = await Order.findOne({
       where: {
         playlistId: ctx.request.body.id,
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     })
 
@@ -329,8 +333,8 @@ async function buy(ctx) {
       await Copy.create({
         baseId: playlist.id,
         copyId: newId,
-        ownerId: ctx.state.user.googleId
-      })
+        ownerId: ctx.state.user.id
+      });
 
       ctx.body = "OK";
     }
@@ -370,13 +374,13 @@ async function deletePlaylist(ctx) {
     var inf = await Copy.findOne({
       where: {
         baseId: ctx.request.body.id,
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     });
 
     await Order.destroy({
       where: {
-        ownerId: ctx.state.user.googleId,
+        ownerId: ctx.state.user.id,
         playlistId: ctx.request.body.id
       }
     })
@@ -384,7 +388,7 @@ async function deletePlaylist(ctx) {
     await Copy.destroy({
       where: {
         baseId: ctx.request.body.id,
-        ownerId: ctx.state.user.googleId
+        ownerId: ctx.state.user.id
       }
     });
 
@@ -490,7 +494,6 @@ router.get('/main', main);
 router.get('/', main);
 router.get('/my-playlists', playlist_l);
 router.get('/playlist-page/:id', playlist_p);
-router.get('/payment', payment);
 router.get('/store', store);
 router.post('/buy', koaBody, buy);
 router.post('/inter', koaBody, inter);

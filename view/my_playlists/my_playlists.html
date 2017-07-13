@@ -211,7 +211,8 @@
 
                 $(box).find( ".red_warn").prop('disabled', true);
                 $(box.parent()).css({"opacity" : "0.5"});
-
+                p_id = $(box).attr("playlist-id");
+                
                 $.post(
                    "/deletePlaylist",//url
                    {//data

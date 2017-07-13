@@ -63,12 +63,12 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(googleId, done) {
-    var user = (await User.findOne({
+    var user = await User.findOne({
         where: {
             googleId: googleId
         },
         attributes: ['id', 'googleId','accessToken','refreshToken','photos','displayName','interledger']
-    })).dataValues;
+    });
     done(null, user);
 });
 
