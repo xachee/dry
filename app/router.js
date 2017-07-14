@@ -272,9 +272,9 @@ async function buy(ctx) {
         playlistId: ctx.request.body.id,
         ownerId: ctx.state.user.id
       }
-    })
+    });
 
-    if (!exist) {
+    if (exist == null) {
       var interPassword = (await User.findOne({
         where: {
           googleId: ctx.state.user.googleId
@@ -304,7 +304,7 @@ async function buy(ctx) {
       if (ctx.state.user.interledger == '' || ctx.state.user.interledger == null || interPassword == '' || interPassword == null) {
         ctx.body = "Inter";
         return 0;
-      }
+      };
 
       await send(ctx.state.user.interledger, interPassword, amount, receiver, "Payment for Playlist: " + playlist.youtubeId);
       console.log("Payment sent");
@@ -312,10 +312,8 @@ async function buy(ctx) {
       await Order.create({
         playlistId: ctx.request.body.id,
         ownerId: ctx.state.user.id
-      })
+      });
       console.log("Order created for user : "+ ctx.state.user.id);
-
-
 
       var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
 
@@ -340,10 +338,10 @@ async function buy(ctx) {
             ptitle: playlist.title,
             vid: videos[i]
           })
-      }
-
+      };
 
       ctx.body = "OK";
+      console.log("Response sent");
     }
   } catch (err) {
     console.log("On line 333: " + err);
@@ -420,6 +418,10 @@ router.post('/sell', koaBody, async (ctx) => {
   // CONSOLES
   console.log("////////////// Starting sell process //////////////////");
   console.log(ctx.request.body);
+  if(ctx.state.user.interledger == null || ctx.state.user.interledger == ''){
+    ctx.body = "Inter";
+    return 0;
+  }
 
   let id = ctx.request.body.id;
   let price = ctx.request.body.price;

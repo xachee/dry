@@ -92,7 +92,9 @@
                          },
                          function(data, status){//Callback
                              //alert("Data: " + data + "\nStatus: " + status);
-                          if(data != 'OK'){
+                           if(data == 'Inter'){
+                             document.location.href = "/payment_settings";
+                           }else if(data != 'OK'){
                             value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
                             alert("Error: Try again");
                            }
