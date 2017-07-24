@@ -42,6 +42,7 @@
                    },
                    function(data, status){//Callback
                        //alert("Data: " + data + "\nStatus: " + status);
+                       alert(data);
                     if(data == 'Inter'){
                       document.location.href = "/payment_settings";
                       //alert("Check your Interledger Account Settings");
@@ -50,11 +51,10 @@
                       alert("Error: Try again(Or Check your Interledger Account Settings");
                       $(box.parent()).css({"opacity" : "1"});
                       $(box).find(".click-buy").prop('disabled', false);
-                     }else{
+                     }
                      $(box.parent()).fadeOut(300, function() {
                        $(box.parent()).remove();
-                        });
-                     }
+                      });
                   }
                  );
               });
