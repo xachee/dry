@@ -39,7 +39,7 @@ const Copy = sq.define('copies', {
   id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   baseId: Sequelize.TEXT,
   copyId: Sequelize.TEXT,
-  ownerId:Sequelize.STRING(22)
+  ownerId: Sequelize.STRING(22)
 });
 
 const Video = sq.define('videos', {

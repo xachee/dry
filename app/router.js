@@ -209,7 +209,7 @@ async function store(ctx) {
 }
 
 async function dashboard(ctx, next) {
-  if(ctx.isAuthenticated()) {
+  if (ctx.isAuthenticated()) {
     var news = [];
     var ordIds = [];
     var gid = null;
@@ -254,7 +254,7 @@ async function dashboard(ctx, next) {
       user: ctx.state.user,
       news: news
     });
-  }else{
+  } else {
     ctx.redirect("/");
   }
 }
@@ -304,16 +304,17 @@ async function buy(ctx) {
       if (ctx.state.user.interledger == '' || ctx.state.user.interledger == null || interPassword == '' || interPassword == null) {
         ctx.body = "Inter";
         return 0;
-      };
+      }
+      ;
 
-      await send(ctx.state.user.interledger, interPassword, amount, receiver, "Payment for Playlist: " + playlist.youtubeId);
+      //await send(ctx.state.user.interledger, interPassword, amount, receiver, "Payment for Playlist: " + playlist.youtubeId);
       console.log("Payment sent");
 
       await Order.create({
         playlistId: ctx.request.body.id,
         ownerId: ctx.state.user.id
       });
-      console.log("Order created for user : "+ ctx.state.user.id);
+      console.log("Order created for user : " + ctx.state.user.id);
 
       var youApi = new YAPI(config, ctx.state.user.accessToken, ctx.state.user.refreshToken);
 
@@ -328,17 +329,18 @@ async function buy(ctx) {
         ownerId: ctx.state.user.id
       });
 
-      console.log("Copy added into Database "+ newId);
+      console.log("Copy added into Database " + newId);
 
       var videos = playlist.videos.split(",");
 
       for (var i in videos) {
-          await youApi.insertVideo({
-            pid: newId,
-            ptitle: playlist.title,
-            vid: videos[i]
-          })
-      };
+        await youApi.insertVideo({
+          pid: newId,
+          ptitle: playlist.title,
+          vid: videos[i]
+        })
+      }
+      ;
 
       ctx.body = "OK";
       console.log("Response sent");
@@ -390,8 +392,8 @@ async function deletePlaylist(ctx) {
       }
     });
     console.log("Order destroied for user : " + ctx.state.user.id);
-    
-    if(inf.dataValues.copyId != null){
+
+    if (inf.dataValues.copyId != null) {
       await Copy.destroy({
         where: {
           baseId: ctx.request.body.id,
@@ -410,7 +412,6 @@ async function deletePlaylist(ctx) {
 }
 
 
-
 // ------------ //
 // Sale process //
 // ------------ //
@@ -418,7 +419,7 @@ router.post('/sell', koaBody, async (ctx) => {
   // CONSOLES
   console.log("////////////// Starting sell process //////////////////");
   console.log(ctx.request.body);
-  if(ctx.state.user.interledger == null || ctx.state.user.interledger == ''){
+  if (ctx.state.user.interledger == null || ctx.state.user.interledger == '') {
     ctx.body = "Inter";
     return 0;
   }

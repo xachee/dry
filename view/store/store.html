@@ -42,9 +42,9 @@
                    },
                    function(data, status){//Callback
                        //alert("Data: " + data + "\nStatus: " + status);
-                       alert(data);
-                    if(data == 'Inter'){
-                      document.location.href = "/payment_settings";
+                     alert(data);
+                     if (data == 'Inter') {
+                       document.location.href = "/payment_settings";
                       //alert("Check your Interledger Account Settings");
                     }else if(data != 'OK'){
                       // value= typeof prices[p_id] !== "undefined" ? "$" + prices[p_id] : 0;
