@@ -1,11 +1,12 @@
 'use strict'
 
 const SPSP = require('ilp').SPSP;
+const config = require('../config/config');
 const FiveBellsLedgerPlugin = require('ilp-plugin-bells');
 
 async function send(sender, senderPass, amount, receiver, message = "") {
   const plugin = new FiveBellsLedgerPlugin({
-    account: 'https://ilp.tumo.org/ledger/accounts/' + sender,
+    account: config.payment.url + sender,
     password: senderPass
   })
 
@@ -13,12 +14,12 @@ async function send(sender, senderPass, amount, receiver, message = "") {
   console.log('connected');
 
   var quote = await SPSP.quote(plugin, {
-    receiver: receiver + '@ilp.tumo.org',
+    receiver: receiver + config.payment.address,
     sourceAmount: amount
   });
 
   quote.headers = {
-    'Source-Identifier': sender + '@ilp.tumo.org',
+    'Source-Identifier': sender + config.payment.address,
     'Message': message
   }
 
